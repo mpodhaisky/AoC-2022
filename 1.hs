@@ -11,10 +11,11 @@ splitter:: [String] -> [Int]
 splitter xs =go xs 
     where
         go [] = [0]
-        go xs = sum (map readInt (takeWhile (/="") xs)):(go (tail' (dropWhile (/="") xs)))
+        go xs = go1 $ span (/="") xs
+        go1 (a,b) = (sum . map readInt $ a):(go $ tail' b)
 
 main = do
     input <- readFile "1"
     --solutions
-    print . maximum . splitter. lines  $ input
-    print . (`maxsum` 3) . splitter. lines  $ input
+    print . maximum . splitter . lines $ input
+    print . (`maxsum` 3) . splitter . lines $ input
