@@ -27,7 +27,7 @@ points' (a, b)
     | otherwise = 7+mod a 3
 
 main = do
-    input <- readFile "2"
+    input <- readFile "2.txt"
     let content = map (tuplify2 . words) . lines  $ input
     --tests
     print . sum $ map points (convert test)
