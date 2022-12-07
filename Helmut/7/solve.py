@@ -1,12 +1,11 @@
 from collections import defaultdict
 
-t = open("input.txt","r").readlines()
+t = open("input.txt", "r").readlines()
 s = defaultdict(int)
 path = ["."]
 for l in t:
-    assert len(path)>0
     if l.startswith("$ cd /"):
-        path = ["."] 
+        path = ["."]
     elif l.startswith("$ cd .."):
         path.pop()
     elif l.startswith("$ cd"):
@@ -19,9 +18,9 @@ for l in t:
         sz = int(xx[0])
         tp = "/".join(path + [xx[1]])
         for k in range(len(path)):
-            kp = "/".join(path[0:k+1])
+            kp = "/".join(path[0 : k + 1])
             s[kp] += sz
 
-print(sum(s[d] for d in s if s[d]<=100000))
-bd = 70000000-s["."]
-print(min(s[d] for d in s if s[d] + bd>=30000000 ))
+print(sum(s[d] for d in s if s[d] <= 100000))
+bd = 70000000 - s["."]
+print(min(s[d] for d in s if s[d] + bd >= 30000000))
