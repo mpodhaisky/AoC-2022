@@ -58,5 +58,6 @@ for l in t:
     print (l, "/".join(path), s)
 L = [s[d] for d in s if s[d]<=100000]
 print(sum(L))
-print("\n".join(f"{d} {s[d]}" for d in s))
+bd = 70000000-s["."]
+print(min(s[d] for d in s if s[d] + bd>=30000000 ))
 
