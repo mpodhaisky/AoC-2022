@@ -1,8 +1,7 @@
+--Setting up data structure
 data Directory = Dir String [Directory] | File String Int deriving Show
 data Cxt = Top | Direction Int Cxt String [Directory] deriving Show
 type Loc = (Directory, Cxt)
-
-solution = Dir "myDir" [Dir "/" []]
 
 top t = (t, Top)
 
@@ -13,6 +12,13 @@ insertAt n i (x:xs) = x : insertAt n (i - 1) xs
 
 moveUp (t, Direction n c name ts) = (Dir name (insertAt t n ts), c)
 
+moveToTop (t, Top) = t
+moveToTop (t, c) = moveToTop (moveUp (t,c))
+
+solution = Dir "myDir" [Dir "/" []]
+--
+
+--Actually solving the problem
 dirSum (File _ n) = n
 dirSum (Dir _ ds) = sum (map dirSum ds)
 
@@ -24,11 +30,9 @@ spaceNeeded t = 30000000- (70000000 -dirSum t)
 remove:: Directory->Int->Int
 remove (File _ ds) n = 70000000
 remove d@(Dir _ ds) n = if dirSum d>=n then  min (dirSum d) (minimum (map (`remove` n) ds )) else 70000000
+--
 
-
-moveToTop (t, Top) = t
-moveToTop (t, c) = moveToTop (moveUp (t,c))
-
+--parsing the input
 readInt:: String -> Int
 readInt = read
 
@@ -47,5 +51,6 @@ parse [] l = l
 
 main = do
     input <- readFile "7.txt"
-    print .total.moveToTop.(`parse` (solution,Top)).map words.lines $ input
-    print .(`remove` 3313415).moveToTop.(`parse` (solution,Top)).map words.lines $ input
+    print .total.moveToTop.(`parse` (top solution)).map words.lines $ input
+    print .(`remove` 3313415).moveToTop.(`parse` (top solution)).map words.lines $ input
+    print.moveToTop.(`parse` (top solution)).map words.lines $ input
