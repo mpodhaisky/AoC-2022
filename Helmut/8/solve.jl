@@ -1,12 +1,7 @@
 m = readlines(open("input","r"))
 n = length(m)
-A = zeros(Int,n,n)
+A = hcat(map(l->parse.(Int,collect(l)),m)...)
 
-for i in 1:n
-    for j in 1:n
-        A[i,j] = parse(Int, m[i][j])
-    end
-end
 D = zeros(Int, n, n)
 B = zeros(Bool, n,n)
 for i in 1:n
