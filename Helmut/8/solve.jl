@@ -16,43 +16,39 @@ for i in 1:n
             ((i < n) && (a > maximum(A[i+1:end,j]))) ||
             ((j > 1) && (a > maximum(A[i,1:j-1]))) ||
             ((j < n) && (a > maximum(A[i,j+1:end]))) )
-        d1 = 0
-        d2 = 0
-        d3 = 0
-        d4 = 0
+        dd = 1
+        d = 0
         for ii in i + 1:n
-            if A[ii,j] < a
-                d1 += 1
-            else
-                d1 +=1 
+            d += 1
+            if A[ii,j] >= a
                 break
             end
         end
+        dd *= d
+        d = 0
         for ii in i-1:-1:1
-            if A[ii,j] < a
-                d2 += 1
-            else
-                d2 +=1 
+            d += 1
+            if A[ii,j] >= a
                 break
             end
         end
+        dd *= d
+        d = 0
         for jj in j + 1:n
-            if A[i,jj] < a
-                d3 += 1
-            else
-                d3 += 1
+            d += 1
+            if A[i,jj] >= a
                 break
             end
         end
+        dd *= d
+        d = 0
         for jj in j-1:-1:1
-            if A[i,jj] < a
-                d4 += 1
-            else
-                d4 += 1
+            d += 1
+            if A[i,jj] >= a
                 break
             end
         end
-        D[i,j] = d1*d2*d3*d4
+        D[i,j] = dd*d
     end
 end
 B[1,:] .= true
