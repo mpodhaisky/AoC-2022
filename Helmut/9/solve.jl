@@ -12,38 +12,25 @@ function follow(t, h)
     tt
 end
 
-function echo(m)
-    for k in 1:size(m)[1]
-        println(join(m[k,:],""))
-    end
-end
-
-const kk = 10
-const nd = 40
-function main()
-    m = readlines(open("input"))
-    x0 = [20,20]
-    h = collect(copy(x0) for _ in 1:kk)
+function run(fn, lenSnake)
+    m = readlines(open(fn))
+    h = collect([0,0] for _ in 1:lenSnake)
     seen = Set()
-    push!(seen, tuple(h[kk]...))
+    push!(seen, tuple(h[lenSnake]...))
     dd = Dict("R" => [1, 0], "L" => [-1, 0], "U" => [0, 1], "D" => [0, -1])
     for (c, l) in split.(m)
-        println(c,"")
-        # m = fill('.',(nd,nd))
         for iter in 1:parse(Int, l)
             h[1] += dd[c]
-            for s in 2:kk
+            for s in 2:lenSnake
                 h[s] = follow(h[s],h[s-1])
             end
-            push!(seen, tuple(h[kk]...))
-
+            push!(seen, tuple(h[end]...))
          end
-        #  for s in 1:kk
-        #     m[nd+1-h[s][2],h[s][1]] = Char(47+s)
-        #  end
-        # #  echo(m)
-
     end
-    print(length(seen))
+    println(length(seen))
 end
-main()
+
+run("small.txt",2)
+run("input",2)
+run("medium.txt",10)
+run("input",10)
