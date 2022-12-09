@@ -1,41 +1,40 @@
-import Data.List
-import Data.Set (fromList) -- besser als nub, braucht aber Ord
+import Data.Set (fromList) 
+import Control.Monad (zipWithM) 
 
-f :: Int -> Int -> Int
-f x y = y + (signum (x-y))
+type Pos = (Int, Int)   -- ein Feld (x,y)
+type Move = (Int, Int)  -- eine Richtung (dx, dy)
+type Schlange = [Pos]   -- die Segmente als Felder
+type Moves = [Move]     -- eine Folge von Richtungen
 
--- (c,d) folgt (a,b)
+-- Segment (c,d) folgt Segment (a,b)
 follow :: Pos -> Pos -> Pos
-follow (a,b) (c,d) = 
-    if max (abs (a-c)) (abs (b-d)) <= 1 
-      then (c,d)
-      else (f a c, f b d)
+follow (a,b) (c,d) = if max (abs (a-c)) (abs (b-d)) <= 1 
+                         then (c,d)
+                         else (f a c, f b d)
+            where f x y = y + (signum (x-y))
 
-move1 ((x,y):snake) (dx,dy) = scanl follow (x+dx, y+dy) snake
+move1step :: Schlange -> Move -> Schlange
+move1step ((x,y):snake) (dx,dy) = scanl follow (x+dx, y+dy) snake
 
-type Pos = (Int, Int) 
-type Loc = ([Pos], Pos)
-
-parse :: String -> [Pos]
+parse :: String -> Moves
 parse (move:n) =  let dir = case move of { 
-     'L' -> (-1,0) ; 'R' -> (1,0) ; 'U' -> (0,1) ; 'D' -> (0,-1) }
-  in replicate (read n) dir
+                      'L' -> (-1,0) ; 'R' -> (1,0) ; 'U' -> (0,1) ; 'D' -> (0,-1) }
+                   in replicate (read n) dir
 
-kurzeSchlange = replicate 2 (0,0)
-langeSchlange = replicate 10 (0,0)
+-- durch das fromList hat man alle Felder nur einmal
+moveAndCount :: Schlange -> Moves -> Int
+moveAndCount schlange = length . fromList . map last . scanl move1step schlange 
 
-test1 = concatMap parse ["R 4", "U 4"]
-test2 = move1 [(0,0),(0,0)] (1,0)
-test3 = foldl move1 kurzeSchlange test1
-test4 = foldl move1 langeSchlange test1
+kurzeSchlange = replicate 2 (0,0)  :: Schlange
+langeSchlange = replicate 10 (0,0) :: Schlange
 
-trace schlange moves  = length $ fromList $ map last $ scanl move1 schlange moves
+test1 = concatMap parse ["R 4", "U 4"]       :: Moves
+test2 = move1step [(0,0),(0,0)] (1,0)        :: Schlange
+test3 = foldl move1step kurzeSchlange test1
+test4 = foldl move1step langeSchlange test1
 
-main = do
-   small <- readFile "small.txt"
-   medium <- readFile "medium.txt"
-   large <- readFile "input"
-   print $ trace kurzeSchlange $ concatMap parse (lines small)
-   print $ trace langeSchlange $ concatMap parse (lines medium)
-   print $ trace langeSchlange $ concatMap parse (lines large)
+main = zipWithM run [kurzeSchlange, langeSchlange, langeSchlange] 
+                    ["small.txt", "medium.txt", "input"]
+       where run schlange fn = fmap (moveAndCount schlange . concatMap parse . lines) 
+                                  $ readFile fn
    
