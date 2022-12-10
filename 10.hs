@@ -16,10 +16,3 @@ main = do
     input <- readFile "10.txt"
     print .sum.map prodT.filter filter40.scanl addT (1,1).concatMap parse.lines $ input
     putStrLn . breakLines 40. concatMap eval.scanl addT (1,0).concatMap parse.lines $ input
-
--- ###..#.....##..####.#..#..##..####..##..
--- #..#.#....#..#.#....#.#..#..#....#.#..#.
--- #..#.#....#....###..##...#..#...#..#....
--- ###..#....#.##.#....#.#..####..#...#.##.
--- #....#....#..#.#....#.#..#..#.#....#..#.
--- #....####..###.#....#..#.#..#.####..###..
