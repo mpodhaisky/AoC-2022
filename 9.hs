@@ -25,9 +25,9 @@ follow (xs,(a,b)) (_,(c,d))
 
 pack (a,b) = ([],(a,b)) ::Loc
 
-unpack (xs, _) = xs ::[Pos]
+-- unpack (xs, _) = xs ::[Pos]   --> (fst, snd) = Standard-Prelude
 
-solver = reverse.unpack .last.scanl follow ([(0,0)],(0,0)) .map pack
+solver = reverse . fst .last.scanl follow ([(0,0)],(0,0)) .map pack
 
 main = do
     input <- readFile "9test.txt"
