@@ -109,18 +109,19 @@ function part1()
         println(prod(sort(collect(values(ni)))[end-1:end]))
 end
 function part2()
-    m = getinput("small.txt")
+    m = getinput("input.txt")
 
     ni = Dict()
     for k in keys(m)
         ni[k] = 0
     end
-    for _ in 1:1000
+    for _ in 1:10_000
        rd(m, ni,2)
     end
     ni |> display
- #       println(prod(sort(collect(values(ni)))[end-1:end]))
+    println(prod(sort(collect(values(ni)))[end-1:end]))
 end
 
-part2()
+part1()
+part2() # 26748929184 too low
 
