@@ -17,11 +17,11 @@ function mul(x)
 end
 
 
-function main()
+function getinput(fn)
     monkey = Dict()
     i = 0
 
-    for line in eachline(open("input.txt"))
+    for line in eachline(open(fn))
         m = match(r"Monkey (.):", line)
         if !isnothing(m) 
             i = parse(Int,m[1])
@@ -60,18 +60,32 @@ function main()
     monkey
 end
 
-function rd(m,ni)
-    m |> display
+function rd(m,ni,dd)
     for i in sort(collect(keys(m)))
-        println(i, " ---- ")
         a = m[i]
         while length(a.items)>0 
             x = popfirst!(a.items)
             ni[i] += 1
-            println(x)
             y = a.operation(x)
-            println(y)
-            y = div(y, 3)
+            # y = div(y, 3) 
+            if mod(y, a.p) == 0 
+                push!(m[a.to1].items,y)
+            else
+                push!(m[a.to2].items,y)
+            end
+        end
+    end
+end        
+function rd(m,ni,part)
+    for i in sort(collect(keys(m)))
+        a = m[i]
+        while length(a.items)>0 
+            x = popfirst!(a.items)
+            ni[i] += 1
+            y = a.operation(x)
+            if part == 1
+                y = div(y, 3)
+            end
             if mod(y, a.p) == 0 
                 push!(m[a.to1].items,y)
             else
@@ -81,16 +95,32 @@ function rd(m,ni)
     end
 end        
 
-m = main()
+function part1()
+    m = getinput("input.txt")
 
-ni = Dict()
-for k in keys(m)
-    ni[k] = 0
+    ni = Dict()
+    for k in keys(m)
+        ni[k] = 0
+    end
+    for _ in 1:20
+       rd(m, ni,1)
+    end
+    
+        println(prod(sort(collect(values(ni)))[end-1:end]))
 end
-for _ in 1:20
-rd(m, ni)
+function part2()
+    m = getinput("small.txt")
+
+    ni = Dict()
+    for k in keys(m)
+        ni[k] = 0
+    end
+    for _ in 1:1000
+       rd(m, ni,2)
+    end
+    ni |> display
+ #       println(prod(sort(collect(values(ni)))[end-1:end]))
 end
 
-println(prod(sort(collect(values(ni)))[end-1:end]))
-
+part2()
 
