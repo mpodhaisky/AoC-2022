@@ -77,7 +77,7 @@ function rd(m,ni,dd)
     end
 end        
 function rd(m,ni,part)
-    for i in sort(collect(keys(m)))
+    for i in 0:length(m)-1
         a = m[i]
         while length(a.items)>0 
             x = popfirst!(a.items)
@@ -109,13 +109,13 @@ function part1()
         println(prod(sort(collect(values(ni)))[end-1:end]))
 end
 function part2()
-    m = getinput("input.txt")
+    m = getinput("small.txt")
 
     ni = Dict()
     for k in keys(m)
         ni[k] = 0
     end
-    for _ in 1:10_000
+    for _ in 1:20
        rd(m, ni,2)
     end
     ni |> display
