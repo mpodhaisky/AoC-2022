@@ -1,5 +1,6 @@
 using DataStructures 
 
+const PP = 2*7*3*19*5*13*11*17*23
 struct Monkey
     items :: Vector{Int}
     f :: Function
@@ -71,7 +72,7 @@ function rd(m,ni,part)
         while length(a.items)>0 
             x = popfirst!(a.items)
             ni[i] += 1
-            y = a.f(x)
+	    y = mod(a.f(x), PP)
             if part == 1
                 y = div(y, 3)
             end
@@ -95,10 +96,10 @@ function part1()
         println(prod(sort(collect(values(ni)))[end-1:end])) # 100345
 end
 function part2()
-    m = getinput("small.txt")
+    m = getinput("input.txt")
 
     ni = DefaultDict(0)
-    for _ in 1:1000
+    for _ in 1:10000
        rd(m, ni,2)
     end
     ni |> display
