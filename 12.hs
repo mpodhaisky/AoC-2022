@@ -20,9 +20,18 @@ childrenOf knot knots = (knot,filter (isChildOf knot) knots)
 
 makePath a b = (a,b)
 
-dijkstra::Edge->[Edge]->[Path]->[Path]
-dijkstra (from, to) edges paths = paths++newPaths
-    where newPaths =(map (makePath from) to)
+delete [] ys = ys
+delete (x:xs) ys = delete xs (filter (/=x) ys)
+
+removeUnveiled xs (from,to) = (from, delete xs to)
+
+getEdge knot edges = head $ filter ((==knot).fst) edges
+
+dijkstra::Edge->[Edge]->[Knot]->[Path]->[Path]
+dijkstra current@(from, to) edges q paths= if (q++to)==[] then paths else dijkstra (getEdge (head (q++to)) edges') edges' (tail (q++to)) (paths++newPaths)
+    where 
+        newPaths =(map (makePath from) to)
+        edges' =map (removeUnveiled (from:to)) (filter (/=current) edges)
 
 main = do
     input <- readFile "12.txt"
@@ -31,6 +40,5 @@ main = do
     let end = setn 26 .head $ filter isEnd knots
     let knots' = start:end:(filter (not .isEnd).filter (not .isStart) $knots)
     let edges =map (`childrenOf` knots') knots'
-
-    print edges
-    print $ dijkstra (head edges) edges []
+    let paths = dijkstra (head edges) edges [] []
+    print paths
