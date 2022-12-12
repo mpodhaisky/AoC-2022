@@ -89,8 +89,12 @@ function part1()
     m = getinput("input.txt")
 
     ni = DefaultDict(0)
-    for _ in 1:20
+    for iter in 1:20
        rd(m, ni,1)
+       if iter == 1
+           println(m)
+           println(ni)
+       end
     end
     
         println(prod(sort(collect(values(ni)))[end-1:end])) # 100345

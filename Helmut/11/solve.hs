@@ -3,19 +3,37 @@ import Data.List (sort)
 
 data Monkey = Monkey { xs :: [Int] , f  :: Int -> Int , to :: Int -> Int }
 
-m0 = Monkey [79, 98]  (*19)  (\x->(if mod x 23 == 0 then 2 else 3))
-m1 = Monkey [54,65,75,74]  (+6)  (\x->(if mod x 19 == 0 then 2 else 0))
-m2 = Monkey [79, 60, 97] (^2) (\x->(if mod x 13 == 0 then 1 else 3))
-m3 = Monkey [74] (+3) (\x -> (if mod x 17 == 0 then 0 else 1))
+data GroupOfMonkeys = GroupOfMonkeys {
+     ms :: Array Int Monkey 
+   , ni :: Array Int Int -- number of inspections 
+   } deriving (Show)
+
+check p a b x = if mod x p == 0 then a else b
+
+-- small set
+m0 = Monkey [79, 98]  (*19)      (check 23 2 3)
+m1 = Monkey [54,65,75,74]  (+6)  (check 19 2 0)
+m2 = Monkey [79, 60, 97] (^2)    (check 13 1 3)
+m3 = Monkey [74] (+3)            (check 17 0 1) 
+
+smallg = GroupOfMonkeys  (array (0,3) $ zip [0..] [m0,m1,m2,m3]) 
+                         (array (0,3) $ zip [0..] [0,0,0,0])
+--
+-- larger input set 
+a0 = Monkey [80] (*5)                             (check 2 4 3)
+a1 = Monkey [75,83,74] (+7)                       (check 7 5 6) 
+a2 = Monkey [86, 67, 61, 96, 52, 63, 73] (+5)     (check 3 7 0)
+a3 = Monkey [85, 83, 55, 85, 57, 70, 85, 52] (+8) (check 17 1 5)
+a4 = Monkey [7, 75, 91, 72, 89] (+4)              (check 11 3 1)
+a5 = Monkey [66, 64, 68, 92, 68, 77] (*2)         (check 19 6 2)
+a6 = Monkey [97, 94, 79, 88] (^2)                 (check 5 2 7)
+a7 = Monkey [77,85]          (+6)                 (check 13 4 0)
 
 give monkey item = Monkey (xs monkey ++ [item]) (f monkey) (to monkey)
 
-data GroupOfMonkeys = GroupOfMonkeys {
-     ms :: Array Int Monkey 
-   , ni :: Array Int Int -- number of inspections
- } deriving (Show)
-
-grp = GroupOfMonkeys  (array (0,3) $ zip [0..] [m0,m1,m2,m3]) (array (0,3) $ zip [0..] [0,0,0,0])
+largeg = GroupOfMonkeys  (array (0,7) 
+                             $ zip [0..] [a0,a1,a2,a3,a4,a5,a6,a7]) 
+                         (array (0,7) $ zip [0..] (replicate 8 0))
 
 turn :: Int -> GroupOfMonkeys  -> GroupOfMonkeys
 turn i grp = let
@@ -43,9 +61,11 @@ inspect m = let
 instance Show Monkey  where
     show (Monkey xs f to ) = show xs
 
+auswertung = foldl1 (*) . take 2 . reverse . sort . elems . ni 
+
 test1 = inspect m0
 test2  = give m3 500
-test3 = turn 0 grp
-test4 = applyN 20 runde grp
-test5 = foldl1 (*) $ take 2 $ reverse $ sort $ elems $ ni test4
-
+test3 = turn 0 smallg
+test4 = applyN 20 runde smallg
+demo = auswertung test4
+part1 = auswertung $ applyN 20 runde largeg 
