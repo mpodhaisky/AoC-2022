@@ -77,10 +77,12 @@ function rd(m,ni,part)
                 y = div(y, 3)
             end
             if mod(y, a.p) == 0 
-                push!(m[a.to1].items,y)
+                rev = a.to1
             else
-                push!(m[a.to2].items,y)
+                rev = a.to2
             end
+            push!(m[rev].items,y)
+
         end
     end
 end        
@@ -111,4 +113,5 @@ function part2()
 end
 
 part1()
-part2() # 26748929184 too low
+part2() 
+
