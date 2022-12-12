@@ -14,7 +14,7 @@ isEnd _ = False
 
 setn n (_,x,y) = (n,x,y)
 
-isChildOf (n,x,y) (m,a,b) = abs (x-a)<=1 && abs (y-b)<=1 && abs (n-m)<=1 && not (x==a&&y==b)
+isChildOf (n,x,y) (m,a,b) = abs (x-a)<=1 && abs (y-b)<=1 && abs (n-m)<=1 && not (abs(x-a)==abs(y-b))
 
 childrenOf knot knots = (knot,filter (isChildOf knot) knots)
 
@@ -33,6 +33,11 @@ dijkstra current@(from, to) edges q paths= if (q++to)==[] then paths else dijkst
         newPaths =(map (makePath from) to)
         edges' =map (removeUnveiled (from:to)) (filter (/=current) edges)
 
+dfs:: Knot->Knot->[Path]->Int
+dfs start end paths = if start==end then 0 else 1+dfs start (fst path) paths
+    where
+        path = head $ filter ((==end).snd) paths
+
 main = do
     input <- readFile "12.txt"
     let knots = concat. scanl1 (zipWith addy).map (scanl1 addx.map packer). lines $ input
@@ -41,4 +46,5 @@ main = do
     let knots' = start:end:(filter (not .isEnd).filter (not .isStart) $knots)
     let edges =map (`childrenOf` knots') knots'
     let paths = dijkstra (head edges) edges [] []
-    print paths
+
+    print $ dfs start end paths
