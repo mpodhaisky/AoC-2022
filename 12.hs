@@ -14,7 +14,7 @@ isEnd _ = False
 
 setn n (_,x,y) = (n,x,y)
 
-isChildOf (n,x,y) (m,a,b) = abs (x-a)<=1 && abs (y-b)<=1 && abs (n-m)<=1 && not (abs(x-a)==abs(y-b))
+isChildOf (n,x,y) (m,a,b) = abs (x-a)<=1 && abs (y-b)<=1 && m-n<=1 && not (abs(x-a)==abs(y-b))
 
 childrenOf knot knots = (knot,filter (isChildOf knot) knots)
 
@@ -27,16 +27,15 @@ removeUnveiled xs (from,to) = (from, delete xs to)
 
 getEdge knot edges = head $ filter ((==knot).fst) edges
 
-dijkstra::Edge->[Edge]->[Knot]->[Path]->[Path]
-dijkstra current@(from, to) edges q paths= if (q++to)==[] then paths else dijkstra (getEdge (head (q++to)) edges') edges' (tail (q++to)) (paths++newPaths)
+bfs::Edge->[Edge]->[Knot]->[Path]->[Path]
+bfs current@(from, to) edges q paths= if (q++to)==[] then paths else bfs (getEdge (head (q++to)) edges') edges' (tail (q++to)) (paths++newPaths)
     where 
         newPaths =(map (makePath from) to)
         edges' =map (removeUnveiled (from:to)) (filter (/=current) edges)
 
-dfs:: Knot->Knot->[Path]->Int
-dfs start end paths = if start==end then 0 else 1+dfs start (fst path) paths
+dfs paths start= if children==[] then 0 else 1+ maximum(map (dfs paths) children)
     where
-        path = head $ filter ((==end).snd) paths
+        children = map snd (filter ((==start).fst) paths)
 
 main = do
     input <- readFile "12.txt"
@@ -45,6 +44,7 @@ main = do
     let end = setn 26 .head $ filter isEnd knots
     let knots' = start:end:(filter (not .isEnd).filter (not .isStart) $knots)
     let edges =map (`childrenOf` knots') knots'
-    let paths = dijkstra (head edges) edges [] []
-
-    print $ dfs start end paths
+    let paths = bfs (head edges) edges [] []
+    let tmp = takeWhile ((/=end).snd) paths
+    
+    print .(+1)$ dfs tmp start
