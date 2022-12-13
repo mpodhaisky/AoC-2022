@@ -1,0 +1,24 @@
+K[L 1,L 1,L 3,L 1,L 1]
+K[L 1,L 1,L 5,L 1,L 1]
+
+K[K[L 1],K[L 2,L 3,L 4]]
+K[K[L 1],L 4]
+
+K[L 9]
+K[K[L 8,L 7,L 6]]
+
+K[K[L 4,L 4],L 4,L 4]
+K[K[L 4,L 4],L 4,L 4,L 4]
+
+K[L 7,L 7,L 7,L 7]
+K[L 7,L 7,L 7]
+
+K[]
+K[L 3]
+
+K[K[K[]]]
+K[K[]]
+
+K[L 1,K[L 2,K[L 3,K[L 4,K[L 5,L 6,L 7]]]],L 8,L 9]
+K[L 1,K[L 2,K[L 3,K[L 4,K[L 5,L 6,L 0]]]],L 8,L 9]
+
