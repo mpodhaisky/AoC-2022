@@ -38,16 +38,15 @@ small = let start' = (0,0)
         in S start' finish' queue' dist adj1 False
 
 oneStep :: S -> S
-oneStep z = if length (queue z) == 0 || (found z) 
-                 then z 
-                 else let
-                          x = head (queue z)
-                          ys = [y | y<-adj z x, dist z!y == infty]
-                          dist' = dist z // [(y, 1 + dist z! x) | y <- ys]
-                          hasFound  = dist z ! finish z <infty
-                      in z { queue = tail (queue z) ++ ys,  dist = dist', found = hasFound}
+oneStep z = if length (queue z) == 0 then z 
+               else let
+                        x = head (queue z)
+                        ys = [y | y<-adj z x, dist z!y == infty]
+                        dist' = dist z // [(y, 1 + dist z! x) | y <- ys]
+                        hasFound  = dist z ! finish z <infty
+                    in z { queue = tail (queue z) ++ ys,  dist = dist', found = hasFound}
 
-runbfs = head . dropWhile (\z -> not $ found z) . iterate oneStep 
+runbfs = until found oneStep 
 test2 = dist (runbfs small)!(finish small)                 
 
 main = do
