@@ -10,12 +10,12 @@ grid nx ny ij@(i,j) = catMaybes $  [if i>0  then Just (i-1,j) else Nothing ]
                                 ++ [if j>0  then Just (i,j-1) else Nothing ]
                                 ++ [if j<ny then Just (i,j+1) else Nothing ]
                                 
-
-small1 = map (map (flip (-) (ord 'a'). ord)) $ words "Sabqponm\nabcryxxl\naccszExk\nacctuvwj\nabdefghi"    
+process = map (map (flip (-) (ord 'a'). ord)) 
+small1 = process $ words "aabqponm\nabcryxxl\naccszzxk\nacctuvwj\nabdefghi"    
 
 m1 = array ((0,0),(4,7)) [((i,j),small1!!i!!j) | i<-[0..4], j<-[0..7]]
 
-adj1 ij =  [ y | y<- grid 4 7 ij, (m1!y == -28) || (m1!ij + 1 >= m1!y) || (m1!ij == -14 && m1!y <= 1)]
+adj1 ij =  [ y | y<- grid 4 7 ij, m1!ij + 1 >= m1!y]
 
 data S = S { 
       start  ::  K
@@ -31,13 +31,11 @@ instance Show S  where
 
 locate m c = fst  $ head $ filter ((==c).snd) (assocs m) 
 
-small = let 
-            s = locate m1 (ord 'S' - ord 'a')
-            f = locate m1 (ord 'E' - ord 'a')
-            q = [s]
-            dist = array (bounds m1) [(ij,infty) | ij <- indices m1] // [(s,0)]  
-         in S s f q dist adj1 False
-
+small = let start' = (0,0)
+            finish' = (2,5)
+            queue' = [start']
+            dist = array (bounds m1) [(ij,infty) | ij <- indices m1] // [(start',0)]  
+        in S start' finish' queue' dist adj1 False
 
 oneStep :: S -> S
 oneStep z = if length (queue z) == 0 || (found z) 
@@ -50,6 +48,17 @@ oneStep z = if length (queue z) == 0 || (found z)
                           finish' = dist z ! finish z <infty
                       in S (start z) (finish z) queue' dist' (adj z) finish'
 
-test1 = head $ dropWhile (\z -> not $ found z) $ iterate oneStep small     
-test2 = dist test1!(finish small)                 
+runbfs = head . dropWhile (\z -> not $ found z) . iterate oneStep 
+test2 = dist (runbfs small)!(finish small)                 
 
+main = do
+    large1 <- fmap (process . words) $ readFile "input1.txt"
+    let m2 = array ((0,0),(40,131)) [((i,j),large1!!i!!j) | i<-[0..40], j<-[0..131]]
+    let adj2 ij =  [ y | y<- grid 40 131 ij, m2!ij + 1 >= m2!y]
+    let large = let 
+                  start' = (20,0)
+                  finish' = (20,107)
+                  queue' = [start']
+                  dist' = array (bounds m2) [(ij, infty) | ij<-indices m2] // [(start',0)]
+                 in S start' finish' queue' dist' adj2 False
+    print $ ( dist (runbfs large)) ! (finish large)
