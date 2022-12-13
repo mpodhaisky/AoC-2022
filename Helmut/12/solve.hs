@@ -3,7 +3,7 @@ import Data.Maybe (catMaybes)
 import Data.Char (ord)
 
 type K = (Int, Int)
-infty = 10000
+infty = 100000
 
 grid nx ny ij@(i,j) = catMaybes $  [if i>0  then Just (i-1,j) else Nothing ] 
                                 ++ [if i<nx then Just (i+1,j) else Nothing ]
@@ -42,11 +42,10 @@ oneStep z = if length (queue z) == 0 || (found z)
                  then z 
                  else let
                           x = head (queue z)
-                          queue' = tail (queue z) ++ ys
                           ys = [y | y<-adj z x, dist z!y == infty]
                           dist' = dist z // [(y, 1 + dist z! x) | y <- ys]
-                          finish' = dist z ! finish z <infty
-                      in S (start z) (finish z) queue' dist' (adj z) finish'
+                          hasFound  = dist z ! finish z <infty
+                      in z { queue = tail (queue z) ++ ys,  dist = dist', found = hasFound}
 
 runbfs = head . dropWhile (\z -> not $ found z) . iterate oneStep 
 test2 = dist (runbfs small)!(finish small)                 

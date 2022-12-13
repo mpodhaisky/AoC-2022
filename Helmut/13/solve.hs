@@ -12,12 +12,11 @@ extra = [K [ K [ L 2 ]], K [ K [L 6]]]
 
 instance Show T where
   show (L a) = show a
-  show (K xs) = "[" ++  ( intercalate ","
-                     $ map show xs ) ++ "]"
+  show (K xs) = "[" ++  ( intercalate "," $ map show xs ) ++ "]"
 
 instance Ord T where 
-  (L x) <= (L y)  = x <= y
-  (L x) <= (K ys) = (K [L x]) <= (K ys)
+  (L x)  <= (L y)  = x <= y
+  (L x)  <= (K ys) = (K [L x]) <= (K ys)
   (K xs) <= (L y) = (K xs) <= (K [L y])
   (K (x:_)) <= (K []) = False
   (K []) <= (K (y:ys)) = True
