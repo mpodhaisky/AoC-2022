@@ -1,4 +1,5 @@
 import Data.List (intercalate) 
+import Text.Read (readMaybe)
 
 data T = L Int | K [T] deriving (Eq)
 
@@ -24,6 +25,8 @@ instance Ord T where
   (K []) <= (K []) = True
   (K (x:xs)) <= (K (y:ys)) = (x<y) || ((x == y) && ((K xs) <= (K ys)))
 
--- pr :: String -> T
---
+
+parseL s = fmap L (readMaybe s :: Maybe Int)
+
+
 test1 = t3 <= t4
