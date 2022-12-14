@@ -3,7 +3,7 @@ import Data.Maybe (catMaybes)
 import Data.Char (ord)
 
 type K = (Int, Int)
-infty = 100000
+infty = maxBound :: Int
 
 grid nx ny ij@(i,j) = catMaybes $  [if i>0  then Just (i-1,j) else Nothing ] 
                                 ++ [if i<nx then Just (i+1,j) else Nothing ]
