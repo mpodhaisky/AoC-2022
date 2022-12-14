@@ -1,8 +1,10 @@
 import Data.List.Split (splitOn)
+import qualified Data.Set as Set
 
 small = "498,4 -> 498,6 -> 496,6\n503,4 -> 502,4 -> 502,9 -> 494,9"
 
 type P = (Int, Int)
+type Grid = Set.Set P
 
 pairs [a,b] = (a,b)
 
@@ -18,20 +20,23 @@ connect2points xy@(x,y) uv@(u,v) = let dx = signum (u-x); dy = signum (v-y)
 connect :: [P] -> [P]
 connect ps = concatMap (uncurry connect2points) $ zip ps (tail ps)
 
-filled txt = concatMap (connect . map read2 . splitOn "->") $ lines txt    
+filled :: String -> Grid
+filled txt = Set.fromList $ concatMap (connect . map read2 . splitOn "->") $ lines txt    
 
-sift grid (xy,_) = let
+sift :: Grid -> (P, Bool) -> (P, Bool)
+sift grid (xy, stuck) = let
                      south = add2 xy (0,1)          
                      sw = add2 xy (-1,1)
                      se = add2 xy (1,1)
-                     xy' = head $ dropWhile (\p -> elem p grid) [south, sw, se, xy]
+                     xy' = head $ dropWhile (\p -> Set.member p grid) [south, sw, se, xy]
                     in (xy', xy'==xy)
 
+addOne :: (Grid, Bool) -> (Grid, Bool)
 addOne (grid,_) = let   
-                  k = maximum $ map snd grid
-                  (xy@(x,y), stopped) = until  (\(xy@(x,y), stopped)-> stopped || y > k) (sift grid) ((500,0), False)
-               in if stopped then (xy:grid, stopped)
-                             else (grid, stopped)
+                  k = maximum $ Set.map snd grid
+                  (xy@(x,y), stuck) = until  (\(xy@(x,y), stuck)-> stuck || y > k) (sift grid) ((500,0), False)
+               in if stuck then (Set.insert xy grid, stuck)
+                             else (grid, stuck)
 
 main = do 
     grid <- fmap filled (readFile "input.txt")
