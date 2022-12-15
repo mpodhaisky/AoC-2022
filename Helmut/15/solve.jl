@@ -7,25 +7,27 @@ function contains(x, seg)
     any(s->contain1(x, s), seg)
 end
 
-
-function main()
-    seg = Set()
-    fn = "small.txt"; z = 10
-    fn = "input.txt"; z = 2000000
-    bacons = []
-
+function readmap(fn)
+    M = []
     for l in eachline(open(fn))
         m = match(r"x=(.+),.*y=(.+):.*x=(.+),.*y=(.+)",l)
-        x,y = parse.(Int,[m[1],m[2]])
-        p = parse.(Int,[m[3],m[4]])
-        if p[2] == z
-            push!(bacons, p[1])
+        push!(M, parse.(Int,[m[1],m[2],m[3],m[4]]))
+    end
+    M
+end    
+
+function main(z, M)
+    seg = Set()
+    bacons = []
+    for (x,y,px,py) in M
+        p = [px,py]
+        if px == z
+            push!(bacons, px)
         end
         d = sum(abs.([x,y] .- p))
         rd = d-abs(z-y)
         if rd >= 0
             ab = [x-rd,x+rd]
-            println(x," ",y," ",p," ",ab)
             push!(seg, ab)
         end
     end 
@@ -34,7 +36,8 @@ function main()
     bb = maximum(xy[2] for xy in seg)
     L = sort([x for x in aa:bb if contains(x, seg) && !(x in bacons)])
     println(length(L))
+    seg
 end
-main()
-
+M = readmap("small.txt")
+seg = main(10, M)
 
