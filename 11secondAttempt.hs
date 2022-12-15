@@ -16,7 +16,7 @@ clearMonkey x@(a,b,c,d,e,f,g) y = if x==y then (a,[],c,d,e,f,g) else y
 addMonkey (a,xs,b,c,d,e,f) (_,ys,_,_,_,_,_) = (a,xs++ys,b,c,d,e,f)
 
 throw (monkey@(a,[],b,c,d,e,f):xs) =xs++[monkey]
-throw (monkey@(a,b,c,d,e,f,g):monkeys)= (zipWith addMonkey (monkeys) (foldl1 (zipWith addMonkey) (map (`update` (monkeys)) (map (eval' d e f.(`mod`96577).function c) b))))++[(a,[],c,d,e,f,g+length b)]
+throw (monkey@(a,b,c,d,e,f,g):monkeys)= (zipWith addMonkey (monkeys) (foldl1 (zipWith addMonkey) (map (`update` (monkeys)) (map (eval' d e f.(`mod`9699690).function c) b))))++[(a,[],c,d,e,f,g+length b)]
 
 eval' a b c d= if d `mod`a==0 then (b,d) else (c,d)
 
@@ -31,8 +31,8 @@ eval ((a,b,c,d,e,f,g):xs) = (a,g):(eval xs)
 main = do
     input <- readFile "11test.txt"
     input1 <- readFile "11.txt"
-    let monkeys =map (parse.map words).breakLines 6.filter (/="").lines $ input
-    let throws = eval.last $ take (4*10000+1) (iterate throw monkeys)
+    let monkeys =map (parse.map words).breakLines 6.filter (/="").lines $ input1
+    let throws = eval.last $ take (8*10000+1) (iterate throw monkeys)
     print throws
 
 
