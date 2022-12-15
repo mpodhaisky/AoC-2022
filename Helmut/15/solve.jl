@@ -16,12 +16,27 @@ function readmap(fn)
     M
 end    
 
+bd = 4000000
+
+function checkline(z, seg)
+    pts = sort(collect(Set(vcat(seg...))))
+    aa = Set(xy[1] for xy in seg)
+    bb = Set(xy[2] for xy in seg)
+    for i  in 2:length(pts)
+        p = pts[i]-1 
+        if !contains(p, seg) && 0<=p<= bd
+            println(z + 4000000 * p)
+        end
+    end
+end
+        
+
 function main(z, M)
     seg = Set()
     bacons = []
     for (x,y,px,py) in M
         p = [px,py]
-        if px == z
+        if py == z
             push!(bacons, px)
         end
         d = sum(abs.([x,y] .- p))
@@ -31,13 +46,25 @@ function main(z, M)
             push!(seg, ab)
         end
     end 
-
-    aa = minimum(xy[1] for xy in seg)
-    bb = maximum(xy[2] for xy in seg)
-    L = sort([x for x in aa:bb if contains(x, seg) && !(x in bacons)])
-    println(length(L))
-    seg
+    checkline(z, seg)
 end
-M = readmap("small.txt")
-seg = main(10, M)
+
+function small()
+    M = readmap("small.txt")
+    for z in 0:20
+        main(z, M)
+    end
+end
+
+function part2()
+    M = readmap("input.txt")
+    for z in 0:4_000_000
+        if mod(z,100_000) == 0
+            println("#")
+         end
+        main(z, M)
+    end
+end
+
+part2()
 
