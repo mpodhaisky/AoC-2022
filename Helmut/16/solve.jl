@@ -24,8 +24,13 @@ function adj(x, V, E, R)
         return ADJ
     end
     if !(e in vv) && R[e] > 0
-        ww  = copy(vv)
-        push!(ww, e)
+        if length(vv) == 0 
+            ww = tuple(e)
+        else
+            r = collect(vv)
+            push!(r, e)
+            ww  = tuple(sort(r)...)
+        end
         push!(ADJ, (e, ww, t+1, g + (30-t-1)*R[e])) # Hahn aufdrehen
     end
     for ee in E[e]
@@ -34,22 +39,27 @@ function adj(x, V, E, R)
     ADJ
 end
 
-function part1()
-    (V,E,R) = readg(fn)
-    x = ("AA",Set(),0,0) # wo, offen/zu, zeit, globales ziel
-    Q = [x]
+function part1(V, E, R)
+    x = ("AA",tuple(),0,0) # wo, offen/zu, zeit, globales ziel
+    Q = Any[x]
     seen = Dict()
     while length(Q)>0
         x = popfirst!(Q)
-        seen[x[1], copy(x[2])] = (x[3], x[4])
-        println(x, " ", length(Q))
+        seen[x[1], join(x[2])] = (x[3], x[4])
+        # println(x, " ", length(Q))
         for y in adj(x, V,E,R)
-            if !haskey(seen, (y[1],y[2])) 
+            if !haskey(seen, (y[1],join(y[2]))) 
                 push!(Q, y)
+            else
+                tt1, gg1 = seen[y[1],join(y[2])]
+                if gg1 < x[4]
+                    push!(Q, y)
+                end
             end
         end
     end
     seen
 end
+(V,E,R) = readg(fn)
 
-seen = part1()
+seen = part1(V,E,R)
