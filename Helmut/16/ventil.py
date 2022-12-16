@@ -93,8 +93,10 @@ display x;
 display Z;
 end;
     """)
+
+
 if __name__ == "__main__":
-    V, E, R = getGraph("small.txt")
+    V, E, R = getGraph("input.txt")
     D = floyd(V, E)
     N = dict()
     for (i,v) in enumerate(["AA"] + [v for v in V if R[v]>0]):
@@ -103,18 +105,12 @@ if __name__ == "__main__":
     V = list(range(len(N))) 
     DD = dict()
     RR = dict()
+    
     for v in N.keys():
         RR[N[v]] = R[v]
         for w in N.keys():
             DD[N[v],N[w]] = D[v,w]
 
-    print(best(0, V[1:], -1, DD, RR))
-    gurobi(V, DD, RR)
+    print("\n".join(" ".join(str(DD[i,j]) for j in V) for i in V))
+    print(" ".join(str(RR[i]) for i in V))
 
-    # G = dict()
-    # for omega in combinations(V[1:],6):
-    #     print(omega)
-    #     for b in V:
-    #         G[omega, b] = best(30, 0, b, omega, DD, RR)
-
-    
