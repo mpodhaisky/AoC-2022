@@ -1,0 +1,22 @@
+digraph G{
+AA [label = "A 0"];
+BB [label = "B 13"];
+CC [label = "C 2"];
+DD [label = "D 20"];
+EE [label = "E 3"];
+FF [label = "F 0"];
+GG [label = "G 0"];
+HH [label = "H 22"];
+II [label = "I 0"];
+JJ [label = "J 21"];
+    AA  -> DD, II, BB;
+    BB -> CC, AA;
+    CC -> DD, BB; 
+    DD -> CC, AA, EE;
+    EE -> FF, DD;
+    FF -> EE, GG;
+    GG -> FF, HH;
+    HH -> GG;
+    II -> AA, JJ;
+    JJ -> II;
+}
