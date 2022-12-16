@@ -78,7 +78,7 @@ end
 
 function part2()
    best = 0
-   for omega1 in combinations(2:15,7)
+   for omega1 in combinations(2:15,5)
        omega2 = setdiff(collect(2:15), omega1)
         m1 = maximum([w(x)[1] for (x,t) in pfade(omega1, 26)])
 	m2 = maximum([w(x)[1] for (x,t) in pfade(omega2, 26)])
@@ -89,7 +89,8 @@ function part2()
 		println(maximum([w(x) for (x,t) in pfade(omega2, 26)]))
 	end
    end
-   # 3000 is to high
+   # 3000 is too high
+   # 2248 is too low
 end
 
 part1()
