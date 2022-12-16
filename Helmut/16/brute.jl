@@ -35,15 +35,14 @@ const r = [0 16 22 5 20 11 4 18 10 21 9 19 13 17 7 8]
 function w(v)
      z = 0
      t = 0
+     dr = 0
      for i in 1:length(v)-1
          dt = d[v[i],v[i+1]]
-         if t + dt > 30
-             break
-         end
          t += d[v[i],v[i+1]]
+         dr += r[v[i+1]]
          z += (30-t)*r[v[i+1]]
      end
-     (z,t)
+     (z,t,dr)
 end
 function brute()
     best = (0,0)
@@ -59,4 +58,34 @@ function brute()
     end
 end
 
-brute()
+function add1(pp, tfinal)
+    r = []
+    for p in pp
+        yy,t = p
+        y = yy[end]
+        for x in setdiff(1:15,yy)
+            d1 = d[y,x]
+            tt = t + d1
+            if tt <= tfinal
+                push!(r, (tuple(vcat(yy...,x)...), tt))
+            end
+        end
+    end
+    r
+end
+
+function p15()
+    set15 = Set()
+    q = [((1,),0)]
+    set15 = union(set15,q)
+    while length(q)>0
+        q = add1(q, 30)
+        set15 = union(set15, q)
+    end
+    set15
+end
+
+s15 = p15()
+maximum([w(x)[1] for (x,t) in s15])
+
+
