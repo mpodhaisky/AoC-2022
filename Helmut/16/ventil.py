@@ -70,7 +70,29 @@ def best(a, omega, b, D, R):
             print(pi)
             bestSoFar = (z,t)
     return bestSoFar
-        
+
+def gurobi(V, d, r):
+    n = len(V)
+    with open("small.ampl", "w") as ampl:
+        ampl.write("""
+param n:= 7;
+set V := 0..n;
+set T := 0..27;
+set ET := {i in V, j in V, t in T};
+var x {(i,j,t) in ET} binary;
+maximize Z:  """)
+        zf = " + ".join((f"{r[j]*(30-t-d[i,j])}*x[{i},{j},{t}]" for i in V for j in V for t in range(28) if i!=j)) + ";"
+        ampl.write(zf)
+        ampl.write("""
+subject to start: sum{j in V} x[0,j,0] = 1;
+subject to flow {t in T, i in V}: sum{j in V, tt in (t+1)..27} x[i,j,tt] <= sum {j in V, tt in 0..t} x[j,i,t];
+subject to bd {i in V}: sum{j in V, t in T} x[i,j,t] <=1 ;
+
+solve;
+display x;
+display Z;
+end;
+    """)
 if __name__ == "__main__":
     V, E, R = getGraph("small.txt")
     D = floyd(V, E)
@@ -87,6 +109,7 @@ if __name__ == "__main__":
             DD[N[v],N[w]] = D[v,w]
 
     print(best(0, V[1:], -1, DD, RR))
+    gurobi(V, DD, RR)
 
     # G = dict()
     # for omega in combinations(V[1:],6):
