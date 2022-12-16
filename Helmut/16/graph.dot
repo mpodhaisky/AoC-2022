@@ -1,0 +1,32 @@
+digraph G{
+CC [label="CC 2"];
+CC->DD;
+CC->BB;
+EE [label="EE 3"];
+EE->FF;
+EE->DD;
+JJ [label="JJ 21"];
+JJ->II;
+FF [label="FF 0"];
+FF->EE;
+FF->GG;
+GG [label="GG 0"];
+GG->HH;
+GG->FF;
+AA [label="AA 0"];
+AA->II;
+AA->DD;
+AA->BB;
+HH [label="HH 22"];
+HH->GG;
+BB [label="BB 13"];
+BB->CC;
+BB->AA;
+II [label="II 0"];
+II->AA;
+II->JJ;
+DD [label="DD 20"];
+DD->CC;
+DD->AA;
+DD->EE;
+}
