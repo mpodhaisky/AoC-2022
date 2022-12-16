@@ -40,30 +40,17 @@ function w(v)
          dt = d[v[i],v[i+1]]
          t += d[v[i],v[i+1]]
          dr += r[v[i+1]]
-         z += (30-t)*r[v[i+1]]
+         z += (26-t)*r[v[i+1]]
      end
      (z,t,dr)
 end
-function brute()
-    best = (0,0)
-    for omega in combinations(2:length(r), 5)
-        for p in permutations(omega)
-            q = vcat(1,p)
-            z = w(q)
-            if z > best
-                println(z, q)
-                best = z
-            end
-        end
-    end
-end
 
-function add1(pp, tfinal)
+function add1(pp, omega, tfinal)
     r = []
     for p in pp
         yy,t = p
         y = yy[end]
-        for x in setdiff(1:15,yy)
+        for x in setdiff(omega, yy)
             d1 = d[y,x]
             tt = t + d1
             if tt <= tfinal
@@ -74,18 +61,37 @@ function add1(pp, tfinal)
     r
 end
 
-function p15()
+function pfade(omega, tfinal)
     set15 = Set()
     q = [((1,),0)]
-    set15 = union(set15,q)
     while length(q)>0
-        q = add1(q, 30)
+        q = add1(q, omega, tfinal)
         set15 = union(set15, q)
     end
     set15
 end
 
-s15 = p15()
-maximum([w(x)[1] for (x,t) in s15])
+function part1()
+    omega = collect(2:15)
+    println(maximum([w(x)[1] for (x,t) in pfade(omega, 30)]))
+end
 
+function part2()
+   best = 0
+   for omega1 in combinations(2:15,7)
+       omega2 = setdiff(collect(2:15), omega1)
+        m1 = maximum([w(x)[1] for (x,t) in pfade(omega1, 26)])
+	m2 = maximum([w(x)[1] for (x,t) in pfade(omega2, 26)])
+	if m1+m2 > best
+		best = m1+m2
+		println("new best", best)
+		println(maximum([w(x) for (x,t) in pfade(omega1, 26)]))
+		println(maximum([w(x) for (x,t) in pfade(omega2, 26)]))
+	end
+   end
+   # 3000 is to high
+end
+
+part1()
+part2()
 
