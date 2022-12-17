@@ -2,8 +2,11 @@ pat = ">>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>"
 
 PX = Set{Tuple{Int64, Int64}}
 
-p1 = Set([(0,0),(1,0),(2,0),(3,0)]) 
-p2 = Set(([(1,0),(0,1),(1,1),(2,1),(1,2)]))
+pps = [ Set([(0,0),(1,0),(2,0),(3,0)]) 
+ , Set(([(1,0),(0,1),(1,1),(2,1),(1,2)]))
+ , Set(([(0,0),(1,0),(2,0),(2,1),(2,2)]))
+ , Set(([(0,0),(0,1),(0,2),(0,3)]))
+ , Set(([(0,0),(1,0),(0,1),(1,1)])) ]
 
 function bildchen(S, p)
     yh = 45
@@ -41,18 +44,18 @@ function addPiece!(S, pat, p)
        y1 = maximum(y for (x,y) in S)
     end
     p = Set((x+2,y+y1+3) for (x,y) in p)
-    bildchen(S, p)
     for d in pat
-        println(d)
+        bildchen(S, p)
         q = move(d, p)
         if !collides(q, S)
             p = q
         end
         q = move('v', p)
-        if !collides(q, S)
+        if collides(q, S)
+            break
+        else
             p = q
         end
-        bildchen(S, p)
     end
     for xy in p
         push!(S, xy)
@@ -79,6 +82,7 @@ end
 
 
 S = Set()
-addPiece!(S, pat, p1)
-addPiece!(S, pat, p2)
 
+for p in pps
+    addPiece!(S, pat, p)
+end
