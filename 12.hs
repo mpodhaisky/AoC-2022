@@ -16,7 +16,11 @@ setn n (_,x,y) = (n,x,y)
 
 isChildOf (n,x,y) (m,a,b) = abs (x-a)<=1 && abs (y-b)<=1 && m-n<=1 && not (abs(x-a)==abs(y-b))
 
+isChildOf' (n,x,y) (m,a,b) = abs (x-a)<=1 && abs (y-b)<=1 && n-m<=1 && not (abs(x-a)==abs(y-b))
+
 childrenOf knot knots = (knot,filter (isChildOf knot) knots)
+
+childrenOf' knot knots = (knot,filter (isChildOf' knot) knots)
 
 makePath a b = (a,b)
 
@@ -33,9 +37,12 @@ bfs current@(from, to) edges q paths= if (q++to)==[] then paths else bfs (getEdg
         newPaths =(map (makePath from) to)
         edges' =map (removeUnveiled (from:to)) (filter (/=current) edges)
 
-dfs paths start= if children==[] then 0 else 1+ maximum(map (dfs paths) children)
+fst' (a,_,_) = a
+
+dfs::[Path]->Knot->Knot->Int
+dfs paths start end= if parent==start then 1 else 1+dfs paths start parent
     where
-        children = map snd (filter ((==start).fst) paths)
+        parent = fst $ head (filter ((==end).snd) paths)
 
 main = do
     input <- readFile "12.txt"
@@ -44,7 +51,10 @@ main = do
     let end = setn 26 .head $ filter isEnd knots
     let knots' = start:end:(filter (not .isEnd).filter (not .isStart) $knots)
     let edges =map (`childrenOf` knots') knots'
+    let edges1 = map (`childrenOf'` knots') knots'
     let paths = bfs (head edges) edges [] []
-    let tmp = takeWhile ((/=end).snd) paths
+    let paths1 = bfs (edges1!!1) edges1 [] []
+    let tmp = snd.head $ snd (span ((/=0).fst'.snd) paths1)
     
-    print .(+1)$ dfs tmp start
+    print $ dfs paths start end --this line got me gold star
+    print $ dfs paths1 end tmp

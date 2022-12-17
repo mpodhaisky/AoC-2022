@@ -11,8 +11,6 @@ function [_, g, n] = case g of
     "*"->(*(read n))
     "+"->(+ (read n))
 
-clearMonkey x@(a,b,c,d,e,f,g) y = if x==y then (a,[],c,d,e,f,g) else y
-
 addMonkey (a,xs,b,c,d,e,f) (_,ys,_,_,_,_,_) = (a,xs++ys,b,c,d,e,f)
 
 throw (monkey@(a,[],b,c,d,e,f):xs) =xs++[monkey]
@@ -34,5 +32,3 @@ main = do
     let monkeys =map (parse.map words).breakLines 6.filter (/="").lines $ input1
     let throws = eval.last $ take (8*10000+1) (iterate throw monkeys)
     print throws
-
-
