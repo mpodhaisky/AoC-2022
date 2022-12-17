@@ -1,5 +1,6 @@
 def flow_():
-    pat = open("input.txt","r").read().strip()
+    r = open("input.txt","tr").readline()
+    pat = r.strip()
     print(len(pat))
     epoch = 0
     while True:
@@ -34,7 +35,7 @@ def bildchen(S, p):
     B = [['.']*7 for i in range(ny)]
     for e, c in zip((S,p),('#','@')):
         for (x,y) in e:
-            if topy-y<=ny:
+            if topy-y<ny:
                 B[topy-y][x] = c
     print("\n".join(["".join(B[i]) for i in range(ny)]))
 
@@ -49,6 +50,9 @@ def addPiece(S):
     p = set((x+2,y+dy) for (x,y) in p)
 
     for c in flow:
+        # print("-------",c, top(S))
+        # bildchen(S,p)
+        # input()
         q = move(c, p)
         if not(collides(q, S)):
             p = q
