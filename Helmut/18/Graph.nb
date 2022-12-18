@@ -1,0 +1,61 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      1717,         53]
+NotebookOptionsPosition[      1192,         37]
+NotebookOutlinePosition[      1584,         53]
+CellTagsIndexPosition[      1541,         50]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Quit", "[", "]"}]], "Input",
+ CellChangeTimes->{{3.8803375714588737`*^9, 3.880337576545793*^9}},
+ CellLabel->"In[11]:=",ExpressionUUID->"34f661f0-caa2-4ee3-9fd0-b26d5808b939"],
+
+Cell[BoxData[
+ RowBox[{"SetDirectory", "[", 
+  RowBox[{"NotebookDirectory", "[", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.880337578866604*^9, 3.880337589009329*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"372e338c-f8c7-49ce-8ae3-7f86118357b6"],
+
+Cell[BoxData[
+ RowBox[{"1", "+", "1"}]], "Input",
+ CellChangeTimes->{{3.8803376109538393`*^9, 
+  3.880337610955649*^9}},ExpressionUUID->"4e3d64e0-b259-47a6-ae44-\
+031690dc02de"]
+},
+WindowSize->{1440., 758.25},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+FrontEndVersion->"12.3 for Linux x86 (64-bit) (May 11, 2021)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"c7d370fd-be92-49e4-b612-d8725eea19df"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 199, 3, 45, "Input",ExpressionUUID->"34f661f0-caa2-4ee3-9fd0-b26d5808b939"],
+Cell[760, 25, 248, 4, 45, "Input",ExpressionUUID->"372e338c-f8c7-49ce-8ae3-7f86118357b6"],
+Cell[1011, 31, 177, 4, 29, "Input",ExpressionUUID->"4e3d64e0-b259-47a6-ae44-031690dc02de"]
+}
+]
+*)
+

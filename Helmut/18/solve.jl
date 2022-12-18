@@ -78,6 +78,32 @@ while length(q)>0
             push!(q, g)
         end
     end
+    if length(seen) >= 15
+        break
+    end
 end
+
+function drawcubes()
+    join(["Cube[{"*string(x)*","*string(y)*","*string(z)*"},0.8]" for (x,y,z)
+ in cubes], ",\n")
+end
+
+function polygon(f)
+    c, d = f
+    (x,y,z) = c
+    (u,v,w) = d
+    a = (x+u)/2
+    b = (y+v)/2
+    c = (z+w)/2
+    "Sphere[{"*string(a)*","*string(b)*","*string(c)*"}"*",0.08]"
+end
+
+io = open("graph", "w")
+write(io, "Graphics3D[{Opacity[0.2],"* drawcubes() 
+            *", Opacity[1], "
+            * join([polygon(f) for f in seen],",\n")
+            *  "}]")
+close(io)
+
 
 
