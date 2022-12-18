@@ -6,6 +6,17 @@ function hexagon(xyz)
     [(x+1,y,z),(x-1,y,z),(x,y+1,z),(x,y-1,z),(x,y,z+1),(x,y,z-1)]
 end
 
+function octagon(xyz)
+    x,y,z = xyz
+    [(x+a,y+b,z+c) for a in (-1,0,1) for b in (-1,0,1) for c in (-1,0,1) if (a,b,c)!=(0,0,0)]
+end
+
+
+function isshadow(xyz)
+    any(c in cubes for c in hexagon(xyz))
+end
+
+
 function incidence(face)
     c, d = face
     (c in cubes) + (d in cubes)
@@ -25,85 +36,36 @@ println(length(outside))
 
 # part 2
 
-(x0,y0,z0) = minimum(cubes)
-f0 = Set([(x0,y0,z0),((x0-1), y0, z0)])
-
-function zwoelf(u, x, y, z)
-    [Set([(x,y+1,z),(u,y+1,z)]),Set([(x,y-1,z),(u,y-1,z)]),
-        Set([(x,y,z+1),(u,y,z+1)]), Set([(x,y,z-1),(u,y,z-1)]),
-        Set([(x,y,z), (x,y+1,z)]),Set([(x,y,z), (x,y-1,z)]),
-        Set([(x,y,z), (x,y,z-1)]),Set([(x,y,z), (x,y,z+1)]),
-        Set([(u,y,z), (u,y,z-1)]),Set([(u,y,z), (u,y,z+1)]),
-        Set([(u,y,z), (u,y,z-1)]),Set([(u,y,z), (u,y,z+1)]),
-        ] 
-end
-
-function t12(cd)
-    c, d = cd
-    (x,y,z) = c
-    (u,v,w) = d
-    Set([(y,x,z),(v,u,w)])
-end
-
-function t13(cd)
-    c, d = cd
-    (x,y,z) = c
-    (u,v,w) = d
-    Set([(z,y,x),(w,v,u)])
+function adj(c) 
+    [w for w in octagon(c) if isshadow(w)]
 end
 
 
-function adj(cd)
-    c, d = cd
-    (x,y,z) = c
-    (u,v,w) = d
-    
-    if x!=u
-        r  = zwoelf(u,x,y,z)
-    elseif y!=v
-        r = [t12(cd) for cd in zwoelf(v,y,x,z)]
-    elseif z!=w
-        r = [t13(cd) for cd in zwoelf(w,z,y,x)]
-    end
-    [f for f in r if isouter(f)]
-end
-
+f0 = minimum(cubes)
 seen = Set()
 q = [f0]
 while length(q)>0
-    f = popfirst!(q)
-    push!(seen, f)
-    for g in adj(f)
-        if !(g in seen)
-            push!(q, g)
+    s = popfirst!(q)
+    push!(seen, s)
+    for y in adj(s)
+        if !(y in seen)
+            push!(q,y)
         end
     end
-    if length(seen) >= 15
-        break
-    end
 end
 
-function drawcubes()
+
+function drawcubes(cc)
     join(["Cube[{"*string(x)*","*string(y)*","*string(z)*"},0.8]" for (x,y,z)
- in cubes], ",\n")
+ in cc], ",\n")
 end
 
-function polygon(f)
-    c, d = f
-    (x,y,z) = c
-    (u,v,w) = d
-    a = (x+u)/2
-    b = (y+v)/2
-    c = (z+w)/2
-    "Sphere[{"*string(a)*","*string(b)*","*string(c)*"}"*",0.08]"
-end
 
 io = open("graph", "w")
-write(io, "Graphics3D[{Opacity[0.2],"* drawcubes() 
+write(io, "Graphics3D[{Opacity[0.2],"* drawcubes(seen) 
             *", Opacity[1], "
-            * join([polygon(f) for f in seen],",\n")
+            * drawcubes(cubes)
             *  "}]")
 close(io)
 
-
-
+wrong = Set(vcat([[(x,y) for y in hexagon(x) if y in cubes ] for x  in seen]...))
