@@ -1,18 +1,16 @@
-smallerThan [[], []] = 0
-smallerThan [[], _] = 1
-smallerThan [_, []] = 0
-smallerThan [(a:as),(b:bs)] 
-    | a==b = smallerThan [as,bs] 
-    | a<b = 1
-    | a>b = 0
+import Data.Tree
+
+parse '[' = "Node {rootLabel = Nothing, subForest = ["
+parse ',' = ","
+parse ']' = "]}"
+parse n = "Node {rootLabel = Just "++[n]++",subForest = []}"
 
 breakLines n = map (take n) . takeWhile (/=[]) . iterate (drop n)
 
-count xs = go xs 1
-    where
-        go [] _= 0
-        go (x:xs) n = if x==1 then n+(go xs (n+1)) else (go xs (n+1))
+readTree:: String->Tree (Maybe Int)
+readTree = read
 
 main = do
     input <- readFile "13test.txt"
-    print .breakLines 2.filter (/="").map (filter (/=',')).lines $ input
+    
+    print.breakLines 2.map (readTree.concatMap parse).filter (/="").lines $ input
