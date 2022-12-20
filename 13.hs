@@ -1,4 +1,4 @@
-data Exp = Bracket [Exp] | Num Int deriving (Show, Read)
+data Exp = Bracket [Exp] | Num Int deriving (Show, Read,Eq)
 
 parse:: String->String
 parse ('[':xs) = "Bracket ["++parse xs
@@ -7,7 +7,7 @@ parse (']':xs) = "]"++parse xs
 parse [] = []
 parse (xs) = "Num "++(takeWhile condition xs)++parse (dropWhile condition xs)
     where
-        condition a = or $ map (==(a:"")) (map show (take 10 (iterate ((+1)) 0)))
+        condition a = or $ map (==(a:"")) (map show (take 10 (iterate (+1) 0)))
 breakLines n = map (take n) . takeWhile (/=[]) . iterate (drop n)
 
 readTree:: String->Exp
@@ -25,7 +25,13 @@ comp' [a , b] = comp a b
 
 f a b = if b == 1 then a else 0
 
+quicksort [] = []
+quicksort (x:xs) = quicksort (filter ( (==1).(`comp` x)) xs) ++[x] ++ quicksort (filter ( (==2).(`comp` x)) xs)
+
+g:: [Exp] ->Int->Exp ->Int
+g a b c= if (c `elem`a) then b else 1
 main = do
     input <- readFile "13.txt"
-    
+    let dividers = [Bracket[ Bracket [Num 2]] ,Bracket [Bracket [Num 6]]]
     print.sum.zipWith f (iterate (+1) 1).map (comp'.map(readTree.parse)).breakLines 2.filter (/="").lines $ input
+    print.product.(zipWith (g dividers) (iterate (+1) 1)).quicksort.(++dividers).map (readTree.parse).filter (/="").lines $ input
