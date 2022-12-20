@@ -1,20 +1,3 @@
-
-function fd(x,xs)
-    for (i,y) in enumerate(xs)
-        if y == x
-            return i
-        end
-    end
-end
-
-function fd0(xs)
-    for (i,y) in enumerate(xs)
-        if y[2] == 0
-            return i
-        end
-    end
-end
-
 function right(x, k, xs)
     i = fd(x,xs)
     n = length(xs)
@@ -40,11 +23,7 @@ function part1()
     ys = copy(xs)
     n = length(xs)
     for x in ys
-        if x[2] > 0
-            right(x, mod(x[2], n-1), xs)
-        elseif x[2]<0
-            right(x,mod(n-1+x[2],n-1), xs)
-        end
+        right(x, mod(x[2], n-1), xs)
     end
     lsg = [find0(xs, 1000)[2],find0(xs,2000)[2],find0(xs,3000)[2]]
     println(lsg, sum(lsg))
@@ -57,11 +36,7 @@ function part2()
     n = length(xs)
     for _ in 1:10
         for x in ys
-            if x[2] > 0
-                right(x, mod(x[2], n-1), xs)
-            elseif x[2]<0
-                right(x,mod(n-1+x[2],n-1), xs)
-            end
+            right(x, mod(x[2], n-1), xs)
         end
         end
     lsg = [find0(xs, 1000)[2],find0(xs,2000)[2],find0(xs,3000)[2]]
