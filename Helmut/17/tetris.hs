@@ -30,6 +30,7 @@ instance Show Board where
                 top = S.fold max 0 $ S.map snd $ hover z
                 c ij = if S.member ij (hover z) then '@'
                        else if S.member ij (b z) then '#'
+                       else if (snd ij) == -1 then '|'
                        else '.'
                 picture = intercalate "\n" [[c (j,i) | i<-[top,top-1..top-80] ] | j<- [6,5..0]]
              in [head (flow z)] ++ " " ++ show (numberPieces z) ++ "\n" ++ picture ++"\n"
@@ -41,8 +42,9 @@ step z = let
             xx = S.map fst (hover z)
             aa = S.fold min 6 xx
             bb = S.fold max 0 xx
-            yy = S.fold min 10 $ S.map snd (hover z)
+            
             top = S.fold max 0 $ S.map snd $ S.union (b z) (hover z) :: Int
+            top1 = S.fold max 0 $ S.map snd newb
             (c:_) = flow z
             dx = if c == '>' && bb<6 then 1
                  else if c == '<' && aa>0 then -1
@@ -51,23 +53,20 @@ step z = let
             p2 = if S.null (S.intersection p1 (b z)) then p1
                                                      else hover z
             p3 = S.map (add (0,-1)) p2
-            downcollide = not $ S.null $ S.intersection p3 (b z)
-            stuck = (yy == 0) || downcollide
-            p4 = if stuck then p2
-                          else p3
-            newb = if stuck then S.union (b z) p4
-                            else b z
-
+            yy = S.fold min 10 $ S.map snd p3
+            freeze =  (yy<0) || (not $ S.null $ S.intersection p3 (b z))
+            newb = if freeze then S.union (b z) p2
+                   else b z
             nn = mod ((next z) + 1) 5
             nextp = ps !! nn :: S.Set P
-            nh =  if stuck then S.map (add (2, 4+top)) nextp
-                           else p4
+            nh =  if freeze then S.map (add (2, 4+top1)) nextp
+                            else p3
          in z {b = newb
              , hover = nh
              , flow = tail (flow z)
-             , next = if stuck then nn
+             , next = if freeze then nn
                                else next z
-             , numberPieces = if stuck then numberPieces z + 1
+             , numberPieces = if freeze then numberPieces z + 1
                                        else numberPieces z 
               }
 
@@ -81,7 +80,7 @@ genBoard fl =
         }
 
 b0 = genBoard flow1 
-b1 = genBoard (unsafePerformIO $ readFile "input.txt")
+b1 = genBoard (unsafePerformIO $ readFile "input2.txt")
 
 demo = height $ until ( (== 2022). numberPieces)  step b0
 part1 = height $ until ( (== 2022). numberPieces)  step b1
