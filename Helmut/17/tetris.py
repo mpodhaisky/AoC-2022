@@ -1,5 +1,5 @@
 def flow_():
-    r = open("input.txt","tr").readline()
+    r = open("small.txt","tr").readline()
     pat = r.strip()
     epoch = 0
     while True:
@@ -86,23 +86,21 @@ def dectectCycleLength(S):
 
 S = set()
 
-T, d = dectectCycleLength(S)
 
-t0 = 5000
-tt = 10**12
-
-# nextp = nextp_()
-# flow = flow_()
-# S = set()
-# for _ in range(tt):
-#     S = addPiece(S)
-# print(top(S))
+tt = 2022
 
 nextp = nextp_()
 flow = flow_()
 S = set()
-for _ in range(t0+(tt-t0)%T):
-    S = addPiece(S)
-ss = ((tt - t0) // T)
-speedup = d * ss  
-print(top(S) + speedup+1)
+for _ in range(tt):
+     S = addPiece(S)
+print(top(S)+1)
+
+#nextp = nextp_()
+#flow = flow_()
+#S = set()
+#for _ in range(t0+(tt-t0)%T):
+#    S = addPiece(S)
+#ss = ((tt - t0) // T)
+#speedup = d * ss  
+#print(top(S) + speedup+1)
