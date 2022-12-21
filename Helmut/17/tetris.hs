@@ -27,10 +27,9 @@ height  = (1+) . S.fold max 0 . S.map snd . b
 
 instance Show Board where 
     show z = let
-                top = S.fold max 0 $ S.map snd $ hover z
+                top = (+4) . S.fold max 0 . S.map snd $ b z
                 c ij = if S.member ij (hover z) then '@'
                        else if S.member ij (b z) then '#'
-                       else if (snd ij) == -1 then '|'
                        else '.'
                 picture = intercalate "\n" [[c (j,i) | i<-[top,top-1..top-80] ] | j<- [6,5..0]]
              in [head (flow z)] ++ " " ++ show (numberPieces z) ++ "\n" ++ picture ++"\n"
@@ -53,8 +52,7 @@ step z = let
             p2 = if S.null (S.intersection p1 (b z)) then p1
                                                      else hover z
             p3 = S.map (add (0,-1)) p2
-            yy = S.fold min 10 $ S.map snd p3
-            freeze =  (yy<0) || (not $ S.null $ S.intersection p3 (b z))
+            freeze =   not $ S.null $ S.intersection p3 (b z)
             newb = if freeze then S.union (b z) p2
                    else b z
             nn = mod ((next z) + 1) 5
@@ -72,7 +70,7 @@ step z = let
 
 genBoard fl = 
      Board {
-        b = S.empty
+        b = S.fromList $ map (\x->(x,-1))  $ enumFromTo 0 6
         , flow = cycle fl
         , next = 0
         , numberPieces = 0
@@ -80,7 +78,7 @@ genBoard fl =
         }
 
 b0 = genBoard flow1 
-b1 = genBoard (unsafePerformIO $ readFile "input2.txt")
+b1 = genBoard (unsafePerformIO $ readFile "input.txt")
 
 demo = height $ until ( (== 2022). numberPieces)  step b0
 part1 = height $ until ( (== 2022). numberPieces)  step b1
