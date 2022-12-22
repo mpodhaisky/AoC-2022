@@ -25,24 +25,20 @@ end
 function move(m, p, d)
     t = p + d
     i,j = p
-    println(t, " ", p, " ", d)
-    println(m[t...])
     if m[t...] == '#'
         return p
     elseif m[t...] == ' '
         if d == [0,1]
             ts = [i,findfirst(m[i,:].!=' ')]
-            println("DEBUG 1")
         elseif d == [0,-1]
             ts = [i,findlast(m[i,:].!=' ')]
         elseif d == [1,0]
             ts = [findfirst(m[:,j].!=' '),j]
         elseif d == [-1,0]
-            ts = [findfirst(m[:,j].!=' '),j]
+            ts = [findlast(m[:,j].!=' '),j]
         else
             error("komisches d")
         end
-        println("DEBUG ", ts)
         if m[ts...]=='#'
             return p
         else
@@ -70,7 +66,6 @@ function part1(fn)
         cmd1 =  split(join([join(split(x,"R")," R ") 
          for x in split(cmd, "L")], " L "))
     for token in cmd1
-        println("TOKEN = ", token)
         if token == "L"
             d = rotl(d)
         elseif token == "R"
