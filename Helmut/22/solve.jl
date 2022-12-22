@@ -65,7 +65,7 @@ end
 function part1(fn) 
     m, cmd = getInput(fn)
     println(size(m))
-    p = [2,52]
+    p = [2,findfirst(m[2,:].!=' ')]
     d = [0,1]
         cmd1 =  split(join([join(split(x,"R")," R ") 
          for x in split(cmd, "L")], " L "))
@@ -87,4 +87,4 @@ function part1(fn)
     sum((p .- [1,1]) .* [1000,4])+facing |> display
 end
 
-part1("input.txt")
+part1("input.txt") #  5340 too low
