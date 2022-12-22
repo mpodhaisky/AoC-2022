@@ -1,8 +1,8 @@
 function getInput(fn)
     txt = readlines(open(fn))
     cmd = txt[end]
-    nx = length(txt[1])
     ny = length(txt)-2
+    nx = maximum(length.(txt[1:end-2]))
     println(nx, " ", ny)
     m = fill(' ', ny+2, nx+2)
     for i in 1:ny
