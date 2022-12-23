@@ -1,5 +1,4 @@
 from random import random
-from pdb import set_trace
 
 Ore, Clay, Obsidian, Geode = (0, 1, 2, 3)
 cost = {
@@ -28,28 +27,37 @@ def e(k):
     return tuple([0] * (k) + [1] + [0] * (3 - k))
 
 
-tend = 20
+tend = 24
 
 
 def backtrack(t, r, bots, bestsofar):
-    rr = add4(r, bots)
     if t == tend:
-        # print("tend reached with", r, bots)
-        nbest = rr[::-1]
+        print("tend reached with", r, bots)
+        nbest = r[::-1]
         if nbest > bestsofar:
             print(nbest)
             return nbest
         else:
             return bestsofar
 
+    rr = add4(r, bots)
     t1 = t + 1
-    best = backtrack(t1, rr, bots, bestsofar)
 
-    for k in range(4):
-        ck = cost[k]
-        if isbigger(r, ck):
+    if True:
+        options = ", ".join(f"{k} {family[k]}" for k in range(4) if isbigger(r, cost[k]))
+
+        print(f"{t:2}| r = {r}, bots = {bots}, BUY? {options}")
+        w = input()
+
+        best = bestsofar
+
+        if len(w) == 0:
+            best = backtrack(t1, rr, bots, bestsofar)
+        else:
+            k = int(w)
+            ck = cost[k]
             best = max(best, backtrack(t1, sub4(rr, ck), add4(bots, e(k)), best))
-    return best
+        return best
 
 
 def simulation():
@@ -65,6 +73,6 @@ def simulation():
     print(r)
 
 
-simulation()
+# simulation()
 best = backtrack(0, (0, 0, 0, 0), (1, 0, 0, 0), (0, 0, 0, 0))
 print(best)
