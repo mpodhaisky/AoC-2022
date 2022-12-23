@@ -30,7 +30,6 @@ def bild(elves):
 
 
 def step(elves, k):
-    print(f"Enter step {k} with {len(elves)} elves ....")
     nelves = set()
     N = (-1, 0)
     S = (1, 0)
@@ -50,7 +49,6 @@ def step(elves, k):
     for phase in (0, 1):
         for e in elves:
             (i, j) = e
-            print(phase, "Elve ",e)
             achter = set(
                 [
                     (i + di, j + dj)
@@ -60,16 +58,13 @@ def step(elves, k):
                 ]
             )
             if elves.isdisjoint(achter):
-                print(e , "hat 8ter frei")
                 nelves.add(e)
                 continue
             for l in range(4):
                 sec, (qi, qj) = ssectors[(k + l) % 4]
                 qq = set([(i + ii, j + jj) for (ii, jj) in sec])
                 q = (i + qi, j + qj)
-                print("probe: ",qq, " schnitt = ",  qq.intersection(elves))
                 if qq.isdisjoint(elves):
-                    print("will nach ", q)
                     if phase == 0:
                         propose[q] += 1
                     elif propose[q] == 1:
@@ -84,9 +79,14 @@ def step(elves, k):
 
 
 if __name__ == "__main__":
-    elves = getInput("input.txt")
-    for k in range(10):
-        bild(elves)
-        elves = step(elves, k)
-        bild(elves)
+    elves = getInput("inputdönne.txt")
+    for k in range(10000):
+        if k % 10 == 0:
+            print(k)
+        nelves = step(elves, k)
+        if sorted(list(nelves)) == sorted(list(elves)):
+            print(k+1)
+            break
+        elves = nelves
+    print(k+1)
    
