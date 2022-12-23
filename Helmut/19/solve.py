@@ -27,11 +27,11 @@ def e(k):
     return tuple([0] * (k) + [1] + [0] * (3 - k))
 
 
-tend = 20
+tend = 18
 
 def backtrack(t, r, bots, bestsofar):
     if t == tend:
-        nbest = r[::-1]
+        nbest = r[3]
         if nbest > bestsofar:
             print(nbest)
             return nbest
@@ -41,7 +41,7 @@ def backtrack(t, r, bots, bestsofar):
     rr = add4(r, bots)
     t1 = t + 1
     best = backtrack(t1, rr, bots, bestsofar)
-    for k in range(4):
+    for k in reversed(range(4)):
         ck = cost[k]
         if isbigger(rr, ck):
             best = max(best, backtrack(t1, sub4(rr, ck), 
@@ -63,5 +63,5 @@ def simulation():
 
 
 # simulation()
-best = backtrack(0, (0, 0, 0, 0), (1, 0, 0, 0), (0, 0, 0, 0))
+best = backtrack(0, (0, 0, 0, 0), (1, 0, 0, 0),  0)
 print(best)
