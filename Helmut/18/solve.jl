@@ -52,7 +52,7 @@ println(length(outside))
 
 function isok(w)
     (x,y,z) = w
-    (0<=x<=bd) && (0<=y<=bd) && (0<=z<=bd) && !(w in cubes)
+    (-1<=x<=bd) && (-1<=y<=bd) && (-1<=z<=bd) && !(w in cubes)
 end
 
 function adj(c) 
