@@ -1,6 +1,6 @@
 using LinearAlgebra
 using Printf 
-tend = 24
+tend = 32
 
 S0 = fill(0, tend, 4)
 S1 = fill(0, tend, 4)
@@ -46,7 +46,7 @@ function cond(C, X)
 end
 
 function Xij(i,j) 
-   X = fill(0, 24, 4)
+   X = fill(0,tend, 4)
    X[i,j] = 1
    X
 end
@@ -104,7 +104,7 @@ end
 
 
 function main()
-    cs = map(b2c, readInput("input2.txt"))
+    cs = map(b2c, readInput("input.txt"))
     total = 0
     for (i, C) in enumerate(cs)
         ampl(C)
