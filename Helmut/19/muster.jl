@@ -3,10 +3,16 @@ using Printf
 
 S = fill(0, 24, 4)
 S[:,1] .= 0:23
+R0 = fill(0,24,4)
+R0[1,1] = 1
 M = fill(0, 24, 24)
+N = fill(0, 24, 24)
 for i in 2:24
     M[i,1:i-1] .= i-1:-1:1
+    N[i,1:i-1] .= 1
 end
+
+C = [4 0 0 0; 2 0 0 0; 3 14 0 0 ; 2 0 7 0]
 
 
 function demo()
@@ -20,7 +26,7 @@ function demo()
 end
 
 function cond(X)
-    C = [4 0 0 0; 2 0 0 0; 3 14 0 0 ; 2 0 7 0]
+   
 
     R[24,4],  M*X-X*C+S
     
@@ -28,7 +34,7 @@ end
 
 
 function ampl()
-    z = join([(@sprintf "%d*x[%d,4]" M[24,j] j) for j in 1:24],"+")
+    z = join([(@sprintf "%d*x[%d,4]" M[24,j] j) for j in 1:24],q"+")
     z
 end
 
