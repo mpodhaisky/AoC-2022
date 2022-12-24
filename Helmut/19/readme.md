@@ -1,4 +1,4 @@
-with solve2.jl: generate ampl for each instance and solve it with
+solve2.jl generates the ampl for each instance and solves them with
 ```
-glpksol --math job1.ampl
+glpsol --math job.ampl
 ```

@@ -98,6 +98,7 @@ function ampl(C)
         solve; 
         for {i in 1.."""*string(tend)*"""} { for {j in 1..4} {printf "%1d ",x[i,j];}printf "\\n";} 
         printf "\\n\\nz = %d\\n", z;\n
+	end; 
         """)
     end
 end
