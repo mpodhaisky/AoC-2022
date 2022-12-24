@@ -1,16 +1,21 @@
 using LinearAlgebra
 using Printf 
 
-S = fill(0, 24, 4)
-S[:,1] .= 0:23
-R0 = fill(0,24,4)
-R0[1,1] = 1
+S0 = fill(0, 24, 4)
+S1 = fill(0, 24, 4)
+S0[:,1] .= 0:23
+S1[:,1] .= 1
+
 M = fill(0, 24, 24)
-N = fill(0, 24, 24)
-for i in 2:24
-    M[i,1:i-1] .= i-1:-1:1
-    N[i,1:i-1] .= 1
+K = fill(0, 24, 24)
+for i in 3:24
+    M[i,1:i-2] .= i-2:-1:1
 end
+for i in 1:24
+    K[i,1:i] .= 1
+end
+
+
 
 C = [4 0 0 0; 2 0 0 0; 3 14 0 0 ; 2 0 7 0]
 
@@ -26,17 +31,16 @@ function demo()
 end
 
 function cond(X)
-   
-
-    R[24,4],  M*X-X*C+S
-    
+   A = M*X-K*X*C+S0
+   R = A+K*X + S1
+  # r = A[end,:]+vcat(ones(Int, 23),0)*X + [1,0,0,0]
+   (A, R)
 end
 
-
-function ampl()
-    z = join([(@sprintf "%d*x[%d,4]" M[24,j] j) for j in 1:24],q"+")
-    z
+function Xij(i,j) 
+   X = fill(0, 24, 4)
+   X[i,j] = 1
+   X
 end
-
+ 
 X = demo()
-z, R = cond(X)
