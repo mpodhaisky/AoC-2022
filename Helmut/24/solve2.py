@@ -53,10 +53,6 @@ def readInput(fn):
         bliz1[t] = frozenset([(i,j) for (i,j,_) in m ])
         m = step(m)
 
-def amZiel(x):
-    ny, nx = frame
-    i,j,t = x
-    return (i,j) == (ny-1, nx-2)
 
 def bild(ijt):
     ny, nx = frame
@@ -106,26 +102,32 @@ def game():
         else:
             a = (i,j,t+1)
 
-def bfs():
+def bfs(aa, bb, t):
     q = deque()
-    aa = (0,1,0)
-    q.append(aa)
+    q.append((aa[0],aa[1],t))
     iter = 0
     while True:
         x = q.popleft()
         iter += 1
-        if amZiel(x):
+        if (x[0]==bb[0]) and (x[1]==bb[1]):
             print("Wir sind gewonnen!")
             print(x)
-            break
+            return x[2]
 
         if iter % 10 == 0:
             print(x, len(q))
         for y in adj(x):
             if y not in q:
                 q.append(y)
-    return x[2]
+    error("niemals hier!")
 
-readInput("input.txt")
-print(bfs())
+readInput("input2.txt")
+ny, nx = frame
+t = 0
+A = (0,1)
+E = (ny-1, nx-2)
+t = bfs(A, E, 0)
+input()
+t = bfs(E, A, t)
+t = bfs(A, E, t)
 # game()
