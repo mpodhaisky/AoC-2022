@@ -26,8 +26,10 @@ def s2d(w):
     return z
 
 
-zz = sum(s2d(w.strip()) for w in open("input.txt","r"))
+zz = sum(s2d(w.strip()) for w in open("inputd.txt","r"))
 
 print(fu(zz))
 
+xx = [2, -1, 1, 0, -2, -2, 1, 2, -1, 1, 2, 2, -1, -2, 1, -1, 1, -1, 2, 2]; 
+print(u2d(xx)-zz)
 print("".join(t[d] for d in xx))
