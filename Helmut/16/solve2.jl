@@ -1,4 +1,4 @@
-tend = 30 
+using Combinatorics
 
 function getinput(fn) 
     E = Dict{String, Set{String}}()
@@ -57,7 +57,10 @@ function pfade(omega, tfinal)
     set15
 end
 
-function w(v)
+"""
+   w(tend, v) evalues the pressure release for a chain of node visits.
+"""
+function w(tend, v)
     z = 0
     t = 0
     dr = 0
@@ -87,30 +90,33 @@ function add1(pp, omega, tfinal)
 end
 
 function part1()
+    tend = 30
     omega = collect(2:length(R))
-    println(maximum([w(x)[1] for (x,t) in pfade(omega, tend)]))
+    println(maximum([w(tend, x)[1] for (x,t) in pfade(omega, tend)]))
 end
 
 function part2()
     best = 0
-    for omega1 in combinations(2:15,5)
-        omega2 = setdiff(collect(2:15), omega1)
-         m1 = maximum([w(x)[1] for (x,t) in pfade(omega1, 26)])
-     m2 = maximum([w(x)[1] for (x,t) in pfade(omega2, 26)])
-     if m1+m2 > best
-         best = m1+m2
-         println("new best", best)
-         println(maximum([w(x) for (x,t) in pfade(omega1, 26)]))
-         println(maximum([w(x) for (x,t) in pfade(omega2, 26)]))
-     end
+    tend = 26
+    n = length(R)
+    for k in 1:div(n, 2)
+        println(k)
+        for omega1 in combinations(2:n,k)
+            omega2 = setdiff(collect(2:n), omega1)
+            m1 = maximum([w(tend, x)[1] for (x,t) in pfade(omega1, tend)])
+            m2 = maximum([w(tend, x)[1] for (x,t) in pfade(omega2, tend)])
+            if m1+m2 > best
+                best = m1+m2
+                println("new best", best)
+                println(maximum([w(tend, x) for (x,t) in pfade(omega1, tend)]))
+                println(maximum([w(tend, x) for (x,t) in pfade(omega2, tend)]))
+            end
+        end
     end
     # 3000 is too high
     # 2248 is too low
  end
 
-D, R = getinput("input2.txt")
+D, R = getinput("input.txt")
 part1()
-
-# input2: 1788 is too low
-
-# backtrack("AA", Set(), 0, V, D, R, 0, 0)
+part2()
