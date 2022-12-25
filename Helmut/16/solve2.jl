@@ -1,3 +1,5 @@
+tend = 30 
+
 function getinput(fn) 
     E = Dict{String, Set{String}}()
     R = Dict{String, Integer}()
@@ -44,26 +46,6 @@ function getinput(fn)
     return D1, [R[V[i]] for i in 1:n]
 end
 
-function backtrack(v, seen, t, V, D, R, pr, bestSoFar)
-    pr = pr + R[v] * (30-t)
-    seen1 = copy(seen)
-    push!(seen1, v)
-    best = bestSoFar
-    for w in V
-        dt = D[v,w]
-        if (w in seen) || t + dt >30 
-            continue
-        end
-        best = backtrack(w,seen1, t+dt, V, D, R, pr, best)  
-    end
-
-    if pr > best
-        println(seen1, pr)
-        return pr
-    else 
-        return best
-    end
-end 
 
 function pfade(omega, tfinal)
     set15 = Set()
@@ -83,7 +65,7 @@ function w(v)
         dt = D[v[i],v[i+1]]
         t += D[v[i],v[i+1]]
         dr += R[v[i+1]]
-        z += (30-t)*R[v[i+1]]
+        z += (tend-t)*R[v[i+1]]
     end
     (z,t,dr)
 end
@@ -105,11 +87,30 @@ function add1(pp, omega, tfinal)
 end
 
 function part1()
-    omega = collect(2:15)
-    println(maximum([w(x)[1] for (x,t) in pfade(omega, 30)]))
+    omega = collect(2:length(R))
+    println(maximum([w(x)[1] for (x,t) in pfade(omega, tend)]))
 end
 
-D, R = getinput("input.txt")
+function part2()
+    best = 0
+    for omega1 in combinations(2:15,5)
+        omega2 = setdiff(collect(2:15), omega1)
+         m1 = maximum([w(x)[1] for (x,t) in pfade(omega1, 26)])
+     m2 = maximum([w(x)[1] for (x,t) in pfade(omega2, 26)])
+     if m1+m2 > best
+         best = m1+m2
+         println("new best", best)
+         println(maximum([w(x) for (x,t) in pfade(omega1, 26)]))
+         println(maximum([w(x) for (x,t) in pfade(omega2, 26)]))
+     end
+    end
+    # 3000 is too high
+    # 2248 is too low
+ end
+
+D, R = getinput("input2.txt")
 part1()
+
+# input2: 1788 is too low
 
 # backtrack("AA", Set(), 0, V, D, R, 0, 0)
