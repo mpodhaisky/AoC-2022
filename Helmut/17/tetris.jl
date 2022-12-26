@@ -43,22 +43,13 @@ function tetris(flow, P, npieces)
             end    
         end       
     end
-    board
+    maximum([y for (x,y) in board])+1
 end
-
 
 fn = "input.txt"
 flow = strip(read(open(fn), String))
 
 P = readPieces()
 
-board = tetris(flow, P, 2022)
-println(maximum([y for (x,y) in board])+1)
+tetris(flow, P, 2022)
 
-# M = fill('.', 20,7)
-# for (x,y) in board
-#     if y>= 0 
-#         M[20-y,x+1] = '#'
-#     end
-# end
-# println(join([join(M[i,:]) for i in 1:20],"\n"))
