@@ -1,19 +1,9 @@
 using Base.Iterators
 
 function readPieces()
-    P = []
-    for bl in split(read(open("pieces.txt"), String),"\n\n")
-        s = Set{Tuple{Int, Int}}()
-        for (i,l) in enumerate(split(bl,"\n"))
-            for (j,c) in enumerate(reverse(l))
-                if c == '#'
-                    push!(s, (j-1,i-1))
-                end
-            end
-        end
-        push!(P, s)
-    end
-    P
+    [Set([(0,0),(1,0),(2,0),(3,0)]), Set([(1,0),(0,1),(1,1),(2,1),(1,2)]), 
+    Set([(0,0),(1,0),(2,0), (2,1),(2,2)]), Set([(0,0),(0,1),(0,2),(0,3)]),
+    Set([(0,0),(1,0),(1,1),(0,1)])]
 end
 
 
@@ -31,7 +21,6 @@ function tetris(flow, P, npieces)
         p = Set([(x+x0,y+y0) for (x,y) in popfirst!(pp)])
         while true
             f = popfirst!(flow)
-            println("flow ", f)
             if f == '>'
                 p1 = Set([(x+1,y) for (x,y) in p])
                 x1 = maximum(x for (x,_) in p1)
@@ -47,10 +36,8 @@ function tetris(flow, P, npieces)
             end
             p1 = Set([(x,y-1) for (x,y) in p])
             if isempty(intersect(p1, board)) 
-                println("sink")
                 p = p1 
             else
-                println("stuck")
                 union!(board, p)
                 break
             end    
@@ -60,18 +47,18 @@ function tetris(flow, P, npieces)
 end
 
 
-
-flow = read(open("small.txt"), String)
+fn = "input.txt"
+flow = strip(read(open(fn), String))
 
 P = readPieces()
 
-board = tetris(flow, P, 3)
+board = tetris(flow, P, 2022)
+println(maximum([y for (x,y) in board])+1)
 
-M = fill('.', 20,7)
-for (x,y) in board
-    if y>= 0 
-        M[20-y,x+1] = '#'
-    end
-end
-println(join([join(M[i,:]) for i in 1:20],"\n"))
-
+# M = fill('.', 20,7)
+# for (x,y) in board
+#     if y>= 0 
+#         M[20-y,x+1] = '#'
+#     end
+# end
+# println(join([join(M[i,:]) for i in 1:20],"\n"))
