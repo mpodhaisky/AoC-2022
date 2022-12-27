@@ -9,6 +9,10 @@ edition = "2021"
 name = "day01"
 path = "1/solve.rs"
 
+[[bin]]
+name = "day02"
+path = "2/solve.rs"
+
 
 [dependencies]
 
