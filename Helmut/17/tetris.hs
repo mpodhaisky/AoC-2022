@@ -78,7 +78,7 @@ genBoard fl =
         }
 
 b0 = genBoard flow1 
-b1 = genBoard (unsafePerformIO $ readFile "input.txt")
+b1 = genBoard (unsafePerformIO $ fmap init $ readFile "input.txt")
 
 demo = height $ until ( (== 2022). numberPieces)  step b0
 part1 = height $ until ( (== 2022). numberPieces)  step b1
