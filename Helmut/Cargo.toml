@@ -11,3 +11,5 @@ path = "1/solve.rs"
 
 
 [dependencies]
+
+itertools = "0.10.5"
