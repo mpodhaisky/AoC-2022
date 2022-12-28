@@ -1,7 +1,6 @@
 
 fn f(s: &str) -> i64 {
     match s {
-        "A Y" => 6 + 2,
         "B Z" => 6 + 3,
         "C X" => 6 + 1,
         "A X" => 3 + 1,
@@ -10,15 +9,15 @@ fn f(s: &str) -> i64 {
         "A Z" => 0 + 3,
         "B X" => 0 + 1,
         "C Y" => 0 + 2,
-        _ => panic!("unexpected input")
+        _ => {println!("unexpected {:}",s); panic!("raus hier!");}
     }
 }
 
 fn g(s: &str) -> i64{
     let a = s.chars().nth(0).unwrap();
-    let b = s.chars().nth(1).unwrap();
+    let b = s.chars().nth(2).unwrap();
     if b == 'Y'{
-        f(&format!("{} {}", a, a))
+        f(&format!("{} {}", a, (a as u8 +23) as char))
     } else if b == 'X' {
         let bb = match a {
             'A' => 'Z',

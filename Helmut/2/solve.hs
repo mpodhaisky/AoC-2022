@@ -10,4 +10,4 @@ check = ev . c . words
 
 main = do
     print $ check "C Z"
-    fmap (sum . map check . lines) $ readFile "input" -- "small.txt"
+    fmap (sum . map check . lines) $ readFile "input.txt" -- "small.txt"
