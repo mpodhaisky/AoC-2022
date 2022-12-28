@@ -1,3 +1,4 @@
+
 fn f(s: &str) -> i64 {
     match s {
         "A Y" => 6 + 2,
@@ -9,12 +10,39 @@ fn f(s: &str) -> i64 {
         "A Z" => 0 + 3,
         "B X" => 0 + 1,
         "C Y" => 0 + 2,
-        _ => unreachable!(),
+        _ => panic!("unexpected input")
+    }
+}
+
+fn g(s: &str) -> i64{
+    let a = s.chars().nth(0).unwrap();
+    let b = s.chars().nth(1).unwrap();
+    if b == 'Y'{
+        f(&format!("{} {}", a, a))
+    } else if b == 'X' {
+        let bb = match a {
+            'A' => 'Z',
+            'B' => 'X',
+            'C' => 'Y',
+            _ => panic!("unexpected input")
+        };
+        f(&format!("{} {}", a, bb))
+    }
+    else {
+        let bb = match a {
+            'A' => 'Y',
+            'B' => 'Z',
+            'C' => 'X',
+            _ => panic!("unexpected input")
+        };
+        f(&format!("{} {}", a, bb))
     }
 }
 
 fn main() {
     let ss = include_str!("input.txt").lines().map(|s| f(s)).sum::<i64>();
+    let s1 = include_str!("input.txt").lines().map(|s| g(s)).sum::<i64>();
 
-    println!("{}", ss);
+    println!("part1: {}", ss);
+    println!("part2: {}", s1);
 }
