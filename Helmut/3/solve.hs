@@ -10,4 +10,4 @@ f r = let (a,b) = splitAt (div (length r) 2) r
 
 main = do 
     fmap (sum . map f . lines) $ readFile "small.txt"
-    fmap (sum . map f . lines) $ readFile "input"
+    fmap (sum . map f . lines) $ readFile "input.txt"

@@ -11,5 +11,4 @@ gr3 :: [String] -> [Char]
 gr3 = map (head . nub . foldl1 intersect . take 3) . takeWhile (/=[]) . iterate (drop 3) 
 
 
-main = do 
-    fmap (sum . map e . gr3. lines) $ readFile "input"
+main = fmap (sum . map e . gr3. lines) $ readFile "input.txt"
