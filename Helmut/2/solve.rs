@@ -1,4 +1,3 @@
-
 fn f(s: &str) -> i64 {
     match s {
         "B Z" => 6 + 3,
@@ -9,30 +8,32 @@ fn f(s: &str) -> i64 {
         "A Z" => 0 + 3,
         "B X" => 0 + 1,
         "C Y" => 0 + 2,
-        _ => {println!("unexpected {:}",s); panic!("raus hier!");}
+        _ => {
+            println!("unexpected {:}", s);
+            panic!("raus hier!");
+        }
     }
 }
 
-fn g(s: &str) -> i64{
+fn g(s: &str) -> i64 {
     let a = s.chars().nth(0).unwrap();
     let b = s.chars().nth(2).unwrap();
-    if b == 'Y'{
-        f(&format!("{} {}", a, (a as u8 +23) as char))
+    if b == 'Y' {
+        f(&format!("{} {}", a, (a as u8 + 23) as char))
     } else if b == 'X' {
         let bb = match a {
             'A' => 'Z',
             'B' => 'X',
             'C' => 'Y',
-            _ => panic!("unexpected input")
+            _ => panic!("unexpected input"),
         };
         f(&format!("{} {}", a, bb))
-    }
-    else {
+    } else {
         let bb = match a {
             'A' => 'Y',
             'B' => 'Z',
             'C' => 'X',
-            _ => panic!("unexpected input")
+            _ => panic!("unexpected input"),
         };
         f(&format!("{} {}", a, bb))
     }
