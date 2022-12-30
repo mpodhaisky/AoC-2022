@@ -20,8 +20,20 @@ fn f(s: &str) -> i64 {
     }
 }
 
-fn same_chars(a: &[char], b: &[char]) -> Vec<char> {
-    a.iter().copied().filter(|c| b.contains(c)).collect()
+fn intersect3(a: &str, b: &str, c: &str) -> i64 {
+    let mut s: HashSet<char> = a.chars().collect(); 
+ 
+    for bb in b.chars() {
+        s.remove(&bb);
+    }
+    
+    for bb in c.chars() {
+        s.remove(&bb);
+    }
+    
+
+    println!("{:?}",s);
+    0
 }
 
 fn main() {
@@ -34,8 +46,7 @@ fn main() {
     let s1: i64 = lines
         .iter()
         .tuples()
-        .map(|(a, b, c)| same_chars(&a.chars(), &same_chars(&b.chars(), &c.chars())))
-        .map(|c| p(c[0]))
+        .map(|(a, b, c)| intersect3(a,b,c))
         .sum();
 
     println!("part1: {}", ss);
