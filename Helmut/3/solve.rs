@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::collections::HashSet;
+use std::{collections::HashSet, hash::Hash};
 
 fn p(c: char) -> i64 {
     match c {
@@ -21,32 +21,27 @@ fn f(s: &str) -> i64 {
 }
 
 fn intersect3(a: &str, b: &str, c: &str) -> i64 {
-    let mut s: HashSet<char> = a.chars().collect(); 
- 
-    for bb in b.chars() {
-        s.remove(&bb);
+    let s1: HashSet<char> = a.chars().collect();
+    let s2: HashSet<char> = b.chars().collect();
+    let s3: HashSet<char> = c.chars().collect();
+    let s4: HashSet<_> = s1.intersection(&s2).cloned().collect();
+    let s5: HashSet<_> = s4.intersection(&s3).cloned().collect();
+    if let Some(c) = s5.into_iter().next() {
+        p(c)
+    } else {
+        0
     }
-    
-    for bb in c.chars() {
-        s.remove(&bb);
-    }
-    
-
-    println!("{:?}",s);
-    0
 }
 
 fn main() {
     let ss: i64 = include_str!("input.txt").lines().map(|s| f(s)).sum();
 
-    let lines = include_str!("input.txt")
-        .lines()
-        .collect::<Vec<_>>();
+    let lines = include_str!("input.txt").lines().collect::<Vec<_>>();
 
     let s1: i64 = lines
         .iter()
         .tuples()
-        .map(|(a, b, c)| intersect3(a,b,c))
+        .map(|(a, b, c)| intersect3(a, b, c))
         .sum();
 
     println!("part1: {}", ss);
