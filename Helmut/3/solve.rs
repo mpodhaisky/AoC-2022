@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{collections::HashSet, hash::Hash};
+use std::collections::HashSet;
 
 fn p(c: char) -> i64 {
     match c {
@@ -21,12 +21,17 @@ fn f(s: &str) -> i64 {
 }
 
 fn intersect3(a: &str, b: &str, c: &str) -> i64 {
-    let s1: HashSet<char> = a.chars().collect();
-    let s2: HashSet<char> = b.chars().collect();
-    let s3: HashSet<char> = c.chars().collect();
-    let s4: HashSet<_> = s1.intersection(&s2).cloned().collect();
-    let s5: HashSet<_> = s4.intersection(&s3).cloned().collect();
-    if let Some(c) = s5.into_iter().next() {
+    let d   = a
+        .chars()
+        .collect::<HashSet<char>>()
+        .intersection(&b.chars().collect())
+        .copied()
+        .collect::<HashSet<char>>()
+        .intersection(&c.chars().collect())
+        .copied()
+        .into_iter()
+        .next();
+    if let Some(c) = d {
         p(c)
     } else {
         0
