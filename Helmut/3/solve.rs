@@ -21,7 +21,7 @@ fn f(s: &str) -> i64 {
 }
 
 fn intersect3(a: &str, b: &str, c: &str) -> i64 {
-    let d   = a
+    let d = a
         .chars()
         .collect::<HashSet<char>>()
         .intersection(&b.chars().collect())
