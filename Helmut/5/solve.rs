@@ -3,7 +3,7 @@ use itertools::Itertools;
 fn mk_stacks(a: &str) -> Vec<Vec<char>> {
     let v = a.lines().collect::<Vec<_>>();
     let n = (v.into_iter().last().unwrap().len() + 1) / 4;
-    let mut stack: Vec<Vec<char>> = (0..n).map(|_| vec![]).collect();
+    let mut stack = vec![vec![]; n];
     for l in a.lines().rev() {
         for i in 0..n {
             let p = 4 * i + 1;
