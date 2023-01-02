@@ -21,6 +21,9 @@ path = "3/solve.rs"
 name = "day04"
 path = "4/solve.rs"
 
+[[bin]]
+name = "day05"
+path = "5/solve.rs"
 
 [dependencies]
 
