@@ -1,0 +1,30 @@
+[package]
+name = "Helmut"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "day01"
+path = "1/solve.rs"
+
+[[bin]]
+name = "day02"
+path = "2/solve.rs"
+
+[[bin]]
+name = "day03"
+path = "3/solve.rs"
+
+[[bin]]
+name = "day04"
+path = "4/solve.rs"
+
+[[bin]]
+name = "day05"
+path = "5/solve.rs"
+
+[dependencies]
+
+itertools = "0.10.5"

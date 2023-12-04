@@ -14,7 +14,7 @@ bd = 22
 faces cubes = 
     [(c,d) | c<- S.toList cubes, d <- hex c, S.member d cubes]
 
-ok (x,y,z) = (all (>=0) [x,y,z]) && (all (<=bd) [x,y,z])
+ok (x,y,z) = (all (>=(-1)) [x,y,z]) && (all (<=bd) [x,y,z])
 
 expand :: PS -> PS -> PS
 expand cubes water  = 

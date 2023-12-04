@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 ex = "small.txt"
-ex = "big.txt"
+ex = "input.txt"
 t = open(ex,"r").readlines()
 n = t.index("\n")-1
 m = max(len(s) for s in t[0:n])//4
